@@ -28,6 +28,7 @@ let wishlist = [];
 let currentUser = null;
 let orders = [];
 let currentOrder = null;
+let users = []; // Initialize users array
 
 // DOM elements
 const productGrid = document.getElementById('productGrid');
@@ -72,6 +73,19 @@ const closeProfileSidebar = document.getElementById('closeProfileSidebar');
 const profileSidebarItems = document.querySelectorAll('.profile-sidebar-item');
 const sidebarUserName = document.getElementById('sidebarUserName');
 const sidebarUserEmail = document.getElementById('sidebarUserEmail');
+
+// Address Modal Elements
+const shippingStateSelect = document.getElementById('shippingState');
+const billingStateSelect = document.getElementById('billingState');
+const sameAsShippingCheckbox = document.getElementById('sameAsShipping');
+const billingSection = document.getElementById('billingSection');
+
+// New DOM elements for address selection/form
+const savedAddressesContainer = document.getElementById('savedAddressesContainer');
+const addressFormContainer = document.getElementById('addressFormContainer');
+const addNewAddressFormBtn = document.getElementById('addNewAddressFormBtn');
+const saveAsDefaultCheckbox = document.getElementById('saveAsDefault');
+
 
 // Initialize the page
 document.addEventListener('DOMContentLoaded', () => {
@@ -118,7 +132,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Search functionality
-    searchInput.addEventListener('input', handleSearch);
+    searchInput.addEventListener('input', enhancedHandleSearch); // Changed to enhancedHandleSearch
 
     // Auth functionality
     profileIcon.addEventListener('click', () => {
@@ -149,73 +163,29 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.style.overflow = '';
     });
 
-    document.getElementById('sameAsShipping').addEventListener('change', (e) => {
-        document.getElementById('billingSection').style.display = e.target.checked ? 'none' : 'block';
+    sameAsShippingCheckbox.addEventListener('change', (e) => {
+        billingSection.style.display = e.target.checked ? 'none' : 'block';
+        if (e.target.checked) {
+            // If checked, copy shipping to billing
+            const shippingAddress = getAddressFromForm('shipping');
+            populateAddressForm(shippingAddress, 'billing');
+        }
     });
+
+    // Populate billing states when shipping state changes or on load
+    shippingStateSelect.addEventListener('change', () => {
+        populateBillingStates(shippingStateSelect.value);
+    });
+    populateBillingStates(shippingStateSelect.value); // Initial population
 
     // **Crucial Change Here:**
     // This event listener now handles the transition from address validation to payment.
-    validateAddressContinueBtn.addEventListener('click', () => {
-        const shippingName = document.getElementById('shippingName').value.trim();
-        const shippingPhone = document.getElementById('shippingPhone').value.trim();
-        const shippingAddress1 = document.getElementById('shippingAddress1').value.trim();
-        const shippingCity = document.getElementById('shippingCity').value.trim();
-        const shippingState = document.getElementById('shippingState').value;
-        const shippingZip = document.getElementById('shippingZip').value.trim();
+    validateAddressContinueBtn.addEventListener('click', handleAddressValidationAndProceed);
     
-        if (!shippingName || !shippingPhone || !shippingAddress1 || !shippingCity || !shippingState || !shippingZip) {
-            showToast('Please complete all required shipping details');
-            return;
-        }
-    
-        if (!document.getElementById('sameAsShipping').checked) {
-            const billingName = document.getElementById('billingName').value.trim();
-            const billingPhone = document.getElementById('billingPhone').value.trim();
-            const billingAddress1 = document.getElementById('billingAddress1').value.trim();
-            const billingCity = document.getElementById('billingCity').value.trim();
-            const billingState = document.getElementById('billingState').value;
-            const billingZip = document.getElementById('billingZip').value.trim();
-    
-            if (!billingName || !billingPhone || !billingAddress1 || !billingCity || !billingState || !billingZip) {
-                showToast('Please complete all required billing details');
-                return;
-            }
-        }
-        
-        // Save address information
-        currentUser.shipping = { 
-            shippingName, 
-            shippingPhone, 
-            shippingAddress1, 
-            shippingCity, 
-            shippingState, 
-            shippingZip 
-        };
-            
-        if (!document.getElementById('sameAsShipping').checked) {
-            currentUser.billing = {
-                billingName: document.getElementById('billingName').value.trim(),
-                billingPhone: document.getElementById('billingPhone').value.trim(),
-                billingAddress1: document.getElementById('billingAddress1').value.trim(),
-                billingCity: document.getElementById('billingCity').value.trim(),
-                billingState: document.getElementById('billingState').value,
-                billingZip: document.getElementById('billingZip').value.trim()
-            };
-        } else {
-            currentUser.billing = currentUser.shipping;
-        }
-        saveUserData();
-        
-        // Close address modal and open payment modal after successful validation
-        addressModal.classList.remove('active');
-        // A small timeout can help with smooth transitions, though not strictly necessary
-        setTimeout(() => {
-            paymentModal.classList.add('active');
-            overlay.classList.add('active'); // Ensure overlay is active for payment modal
-            document.body.style.overflow = 'hidden'; // Keep body scroll locked
-        }, 300);
-    });
-    
+    // Event listener for "Add New Address" button in the address selection modal
+    if (addNewAddressFormBtn) {
+        addNewAddressFormBtn.addEventListener('click', showAddressFormForNewEntry);
+    }
 
     // Order confirmation modal
     closeConfirmationModal.addEventListener('click', closeConfirmationModalHandler);
@@ -239,6 +209,74 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 }); // End of DOMContentLoaded
+
+// Helper to get address from form fields
+function getAddressFromForm(prefix) {
+    const val = (id, def='') => {
+        const el = document.getElementById(`${prefix}${id}`);
+        return el ? (el.value || '').trim() : def;
+    };
+    return {
+        name: val('Name'),
+        email: val('Email'),
+        phone: val('Phone'),
+        address1: val('Address1'),
+        address2: val('Address2'),
+        city: val('City'),
+        state: val('State'),
+        zip: val('Zip'),
+        country: val('Country','India')
+    };
+}
+
+// Helper to populate form fields with address data
+function populateAddressForm(address, prefix) {
+    const setVal = (id, value='') => {
+        const el = document.getElementById(`${prefix}${id}`);
+        if (el) el.value = value;
+    };
+    setVal('Name', address.name || '');
+    setVal('Email', address.email || '');
+    setVal('Phone', address.phone || '');
+    setVal('Address1', address.address1 || '');
+    setVal('Address2', address.address2 || '');
+    setVal('City', address.city || '');
+    setVal('State', address.state || '');
+    setVal('Zip', address.zip || '');
+    setVal('Country', address.country || 'India');
+}
+
+// Helper to compare two address objects
+function isAddressEqual(addr1, addr2) {
+    // Simple comparison, might need deeper logic for complex objects
+    return JSON.stringify(addr1) === JSON.stringify(addr2);
+}
+
+// Populate billing states based on shipping states
+function populateBillingStates(selectedShippingState) {
+    if (!shippingStateSelect || !billingStateSelect) { return; }
+    const shippingOptions = Array.from(shippingStateSelect.options).map(option => ({
+        value: option.value,
+        text: option.text
+    }));
+
+    billingStateSelect.innerHTML = ''; // Clear existing options
+
+    shippingOptions.forEach(option => {
+        const newOption = document.createElement('option');
+        newOption.value = option.value;
+        newOption.textContent = option.text;
+        billingStateSelect.appendChild(newOption);
+    });
+
+    // Set selected state if available in billing address
+    if (currentUser && currentUser.billing && currentUser.billing.state) {
+        billingStateSelect.value = currentUser.billing.state;
+    } else {
+        billingStateSelect.value = selectedShippingState; // Default to shipping state
+    }
+}
+
 
 // Render products with size selection
 function renderProducts(productsToRender) {
@@ -536,29 +574,9 @@ function filterProducts(category) {
     renderProducts(filteredProducts);
 }
 
-// Handle search
-function handleSearch() {
-    const searchTerm = searchInput.value.toLowerCase().trim();
-
-    if (searchTerm === '') {
-        const activeFilter = document.querySelector('.filter-btn.active').dataset.filter;
-        filterProducts(activeFilter);
-        return;
-    }
-
-    const filteredProducts = products.filter(product =>
-        product.name.toLowerCase().includes(searchTerm) ||
-        product.category.toLowerCase().includes(searchTerm)
-    );
-
-    renderProducts(filteredProducts);
-}
-
 // Show product details (simulated)
-function showProductDetails(product) {
-    showToast(`Viewing details for ${product.name}`);
-    // In a real implementation, this would open a product detail page
-}
+
+
 
 // Show toast notification
 function showToast(message) {
@@ -638,6 +656,7 @@ function saveUserData() {
     localStorage.setItem('mm_orders', JSON.stringify(orders));
     localStorage.setItem('mm_cart', JSON.stringify(cart));
     localStorage.setItem('mm_wishlist', JSON.stringify(wishlist));
+    localStorage.setItem('mm_users', JSON.stringify(users)); // Ensure users array is saved
 }
 
 function registerUser() {
@@ -654,9 +673,6 @@ function registerUser() {
     }
 
     // Check if user already exists
-    const storedUsers = localStorage.getItem('mm_users');
-    let users = storedUsers ? JSON.parse(storedUsers) : [];
-
     if (users.find(user => user.email === email)) {
         showToast('Email already registered');
         return;
@@ -668,17 +684,29 @@ function registerUser() {
         name,
         email,
         password,
-        address,
+        address, // This is the primary address, but we'll also use `addresses` array
         phone,
-        createdAt: new Date().toISOString()
+        createdAt: new Date().toISOString(),
+        addresses: [] // Initialize addresses array for the new user
     };
 
+    // Add the initial address to the addresses array
+    newUser.addresses.push({
+        id: Date.now(), // Assign an ID to the initial address
+        name, email, phone,
+        address1: address, // Assuming registerAddress is address1
+        address2: '', // No address2 from registration form
+        city: '', state: '', zip: '', country: 'India', // No detailed address from registration form
+        isDefault: true, // Make the first address default
+        type: 'shipping' // Assume initial address is for shipping
+    });
+
     users.push(newUser);
-    localStorage.setItem('mm_users', JSON.stringify(users));
+    saveUserData(); // Save the updated users array
 
     // Auto-login the new user
     currentUser = newUser;
-    saveUserData();
+    saveUserData(); // Save currentUser
     updateSidebarUserInfo();
 
     showToast('Registration successful!');
@@ -689,13 +717,11 @@ function loginUser() {
     const email = document.getElementById('loginEmail').value;
     const password = document.getElementById('loginPassword').value;
 
-    const storedUsers = localStorage.getItem('mm_users');
-    if (!storedUsers) {
+    if (!users || users.length === 0) {
         showToast('No users registered yet');
         return;
     }
 
-    const users = JSON.parse(storedUsers);
     const user = users.find(u => u.email === email && u.password === password);
 
     if (user) {
@@ -899,12 +925,7 @@ function removeFromWishlist(productId) {
 }
 
 // Original checkout function (now replaced by enhancedCheckout)
-function checkout() {
-    if (!currentUser) {
-        showToast('Please login to proceed with checkout');
-        toggleAuthModal();
-        return;
-    }
+function checkout() { // This function is now replaced by enhancedCheckout
     if (cart.length === 0) {
         showToast('Your cart is empty');
         return;
@@ -941,13 +962,21 @@ function placeOrder() {
         total,
         date: new Date().toISOString(),
         status: 'Processing',
-        paymentMethod: 'Cash on Delivery'
+        paymentMethod: 'Cash on Delivery',
+        shippingAddress: currentUser.shipping, // Save the selected shipping address
+        billingAddress: currentUser.billing // Save the selected billing address
     };
 
     // Save order
     orders.push(order);
-    saveUserData();
     currentOrder = order;
+
+    // Clear the cart after successful order placement
+    cart = [];
+    updateCartCount();
+
+    // Save user data after clearing cart
+    saveUserData();
 
     // Show confirmation modal
     orderIdPlaceholder.textContent = `#${order.id}`;
@@ -966,9 +995,7 @@ function downloadInvoiceHandler() {
 
 function continueShoppingHandler() {
     closeConfirmationModalHandler();
-    // Reset cart
-    cart = [];
-    updateCartCount();
+    // Cart is already cleared in placeOrder function
     // Close any open modals
     cartSidebar.classList.remove('active');
     paymentModal.classList.remove('active');
@@ -990,14 +1017,14 @@ function generateInvoice(order) {
     doc.text(`Invoice #: ${order.id}`, 105, 40, null, null, 'center');
     doc.text(`Date: ${new Date(order.date).toLocaleDateString()}`, 105, 45, null, null, 'center');
 
-    // Customer information
+    // Customer Information (using shipping address from order)
     doc.setFontSize(12);
-    doc.text('Customer Information:', 20, 60);
+    doc.text('Shipping Information:', 20, 60);
     doc.setFontSize(10);
-    doc.text(`Name: ${currentUser.name}`, 20, 70);
-    doc.text(`Email: ${currentUser.email}`, 20, 75);
-    doc.text(`Address: ${currentUser.address}`, 20, 80);
-    doc.text(`Phone: ${currentUser.phone}`, 20, 85);
+    doc.text(`Name: ${order.shippingAddress.name}`, 20, 70);
+    doc.text(`Email: ${order.shippingAddress.email}`, 20, 75);
+    doc.text(`Phone: ${order.shippingAddress.phone}`, 20, 80);
+    doc.text(`Address: ${order.shippingAddress.address1}, ${order.shippingAddress.address2 ? order.shippingAddress.address2 + ', ' : ''}${order.shippingAddress.city}, ${order.shippingAddress.state} - ${order.shippingAddress.zip}, ${order.shippingAddress.country}`, 20, 85);
 
     // Order details
     doc.setFontSize(12);
@@ -1041,71 +1068,19 @@ function generateInvoice(order) {
     doc.save(`invoice-${order.id}.pdf`);
 }
 
-function loadSidebarOrderHistory() {
-    if (!currentUser) return;
 
-    const userOrders = orders.filter(order => order.userId === currentUser.id);
-    const orderList = document.getElementById('sidebarOrderList');
 
-    if (userOrders.length === 0) {
-        orderList.innerHTML = '<p style="text-align:center; padding:30px;">You have no orders yet</p>';
-        return;
-    }
-
-    orderList.innerHTML = '';
-    userOrders.sort((a, b) => new Date(b.date) - new Date(a.date)).forEach(order => {
-        const orderCard = document.createElement('div');
-        orderCard.className = 'order-card';
-        orderCard.innerHTML = `
-            <div class="order-header">
-                <div>
-                    <strong>Order #${order.id}</strong>
-                    <div>${new Date(order.date).toLocaleDateString()}</div>
-                </div>
-                <div>
-                    <span class="order-status">${order.status}</span>
-                </div>
-            </div>
-            <div class="order-summary">
-                <div>Total:</div>
-                <div>₹${order.total.toLocaleString()}</div>
-            </div>
-            <div class="order-actions">
-                <button class="invoice-btn" data-id="${order.id}">Download Invoice</button>
-            </div>
-        `;
-
-        orderList.appendChild(orderCard);
-    });
-
-    // Add event listeners to invoice buttons
-    document.querySelectorAll('.invoice-btn').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            const orderId = parseInt(e.target.dataset.id);
-            const order = orders.find(o => o.id === orderId);
-            if (order) {
-                generateInvoice(order);
-            }
-        });
-    });
-}
 
 // Helper functions for other sections (simplified implementations)
-function loadPasswordResetSection() {
-    // Implementation for password reset section
-}
 
-function loadAccountSettingsData() {
-    // Implementation for account settings
-}
 
-function loadSiteAnalytics() {
-    // Implementation for site analytics
-}
 
-function loadAddressValidation() {
-    // Implementation for address validation
-}
+
+
+
+
+
+
 // Password Reset Section Implementation
 function loadPasswordResetSection() {
     const currentPasswordReset = document.getElementById('currentPasswordReset');
@@ -1211,23 +1186,18 @@ function loadPasswordResetSection() {
         currentUser.password = newPasswordReset.value;
         
         // Update in users array
-        const storedUsers = localStorage.getItem('mm_users');
-        if (storedUsers) {
-            const users = JSON.parse(storedUsers);
-            const userIndex = users.findIndex(u => u.id === currentUser.id);
-            if (userIndex !== -1) {
-                users[userIndex] = currentUser;
-                localStorage.setItem('mm_users', JSON.stringify(users));
-                saveUserData();
-                
-                // Clear fields
-                currentPasswordReset.value = '';
-                newPasswordReset.value = '';
-                confirmPasswordReset.value = '';
-                passwordStrength.className = 'password-strength';
-                
-                showToast('Password changed successfully');
-            }
+        const userIndex = users.findIndex(u => u.id === currentUser.id);
+        if (userIndex !== -1) {
+            users[userIndex] = currentUser;
+            saveUserData();
+            
+            // Clear fields
+            currentPasswordReset.value = '';
+            newPasswordReset.value = '';
+            confirmPasswordReset.value = '';
+            passwordStrength.className = 'password-strength';
+            
+            showToast('Password changed successfully');
         }
     });
 }
@@ -1263,17 +1233,12 @@ function loadAccountSettingsData() {
         currentUser.address = settingsAddress.value;
 
         // Update in users array
-        const storedUsers = localStorage.getItem('mm_users');
-        if (storedUsers) {
-            const users = JSON.parse(storedUsers);
-            const userIndex = users.findIndex(u => u.id === currentUser.id);
-            if (userIndex !== -1) {
-                users[userIndex] = currentUser;
-                localStorage.setItem('mm_users', JSON.stringify(users));
-                saveUserData();
-                updateSidebarUserInfo();
-                showToast('Profile updated successfully');
-            }
+        const userIndex = users.findIndex(u => u.id === currentUser.id);
+        if (userIndex !== -1) {
+            users[userIndex] = currentUser;
+            saveUserData();
+            updateSidebarUserInfo();
+            showToast('Profile updated successfully');
         }
     });
 
@@ -1333,16 +1298,15 @@ function loadAccountSettingsData() {
     deleteAccountSidebar.addEventListener('click', () => {
         if (confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
             // Remove user from users array
-            const storedUsers = localStorage.getItem('mm_users');
-            if (storedUsers) {
-                const users = JSON.parse(storedUsers);
-                const updatedUsers = users.filter(u => u.id !== currentUser.id);
-                localStorage.setItem('mm_users', JSON.stringify(updatedUsers));
+            const userIndex = users.findIndex(u => u.id === currentUser.id);
+            if (userIndex !== -1) {
+                users.splice(userIndex, 1); // Remove the user
                 
                 // Clear user data
                 currentUser = null;
                 cart = [];
                 wishlist = [];
+                orders = orders.filter(order => order.userId !== currentUser.id); // Remove user's orders
                 saveUserData();
                 updateCartCount();
                 updateWishlistCount();
@@ -1397,11 +1361,7 @@ function loadAddressValidation() {
     const addNewAddressBtn = document.getElementById('addNewAddressBtn');
 
     // Initialize saved addresses
-    if (currentUser && currentUser.addresses) {
-        renderSavedAddresses(currentUser.addresses);
-    } else if (currentUser) {
-        currentUser.addresses = [];
-    }
+    renderSavedAddresses(getUserAddresses());
 
     validateAddressBtn.addEventListener('click', () => {
         const address = addressToValidate.value.trim();
@@ -1411,11 +1371,11 @@ function loadAddressValidation() {
             return;
         }
 
-        // Simulate address validation
+        // For demo purposes, we'll simulate validation
         validationResult.style.display = 'block';
         validationResult.className = 'validation-result';
         
-        // Random success/failure for demo
+        // In a real implementation, you would call an address validation API here
         const isValid = Math.random() > 0.3;
         
         if (isValid) {
@@ -1430,7 +1390,32 @@ function loadAddressValidation() {
             `;
             
             document.getElementById('saveValidatedAddress')?.addEventListener('click', () => {
-                saveAddress(address);
+                // Parse the address into components (in a real app, this would come from the validation API)
+                const addressComponents = {
+                    address1: address,
+                    city: 'Sample City',
+                    state: 'Sample State',
+                    zip: '123456'
+                };
+                
+                // Prompt user to complete the address
+                const name = prompt('Please enter your full name for this address:');
+                if (!name) return;
+                
+                const phone = prompt('Please enter your phone number:');
+                if (!phone) return;
+                
+                const addressData = {
+                    name,
+                    phone,
+                    ...addressComponents
+                };
+                
+                if (saveUserAddress(addressData, 'shipping', false)) {
+                    showToast('Address saved successfully');
+                    validationResult.style.display = 'none';
+                    renderSavedAddresses(getUserAddresses());
+                }
             });
         } else {
             validationResult.classList.add('error');
@@ -1450,44 +1435,28 @@ function loadAddressValidation() {
     });
 
     addNewAddressBtn.addEventListener('click', () => {
-        const newAddress = prompt('Enter new address:');
-        if (newAddress && newAddress.trim()) {
-            saveAddress(newAddress.trim());
-        }
+        showAddressEntryModal();
     });
-
-    function saveAddress(address) {
-        if (!currentUser) return;
-        
-        if (!currentUser.addresses) {
-            currentUser.addresses = [];
-        }
-        
-        if (!currentUser.addresses.includes(address)) {
-            currentUser.addresses.push(address);
-            saveUserData();
-            renderSavedAddresses(currentUser.addresses);
-            showToast('Address saved successfully');
-            validationResult.style.display = 'none';
-        } else {
-            showToast('Address already exists');
-        }
-    }
 
     function renderSavedAddresses(addresses) {
         if (!savedAddressList) return;
         
         if (addresses.length === 0) {
-            savedAddressList.innerHTML = '<p>No saved addresses</p>';
+            savedAddressList.innerHTML = '<div class="empty-state"><p>No saved addresses</p></div>';
             return;
         }
         
-        savedAddressList.innerHTML = addresses.map((address, index) => `
-            <div class="address-item">
-                <p>${address}</p>
+        savedAddressList.innerHTML = addresses.map(address => `
+            <div class="address-item ${address.isDefault ? 'default' : ''}">
+                <div class="address-header">
+                    <h4>${address.name} ${address.isDefault ? '(Default)' : ''}</h4>
+                    <div class="address-type">${address.type === 'shipping' ? 'Shipping' : 'Billing'}</div>
+                </div>
+                <p>${address.address1}, ${address.city}, ${address.state} - ${address.zip}</p>
+                <p>Phone: ${address.phone}</p>
                 <div class="address-actions">
-                    <button class="btn btn-sm" onclick="setDefaultAddress(${index})">Set Default</button>
-                    <button class="btn btn-outline btn-sm" onclick="removeAddress(${index})">Remove</button>
+                    <button class="btn btn-sm" onclick="setDefaultAddress(${address.id})" ${address.isDefault ? 'disabled' : ''}>Set Default</button>
+                    <button class="btn btn-outline btn-sm" onclick="deleteAddress(${address.id})">Delete</button>
                 </div>
             </div>
         `).join('');
@@ -1495,15 +1464,73 @@ function loadAddressValidation() {
 }
 
 // Address management functions
-function setDefaultAddress(index) {
+function selectAddressForCheckout(index) {
     if (!currentUser || !currentUser.addresses || index >= currentUser.addresses.length) return;
     
-    const address = currentUser.addresses[index];
-    currentUser.address = address; // Set as primary address
-    saveUserData();
-    showToast('Default address updated');
-    loadAddressValidation(); // Refresh the view
+    const selectedAddress = currentUser.addresses[index];
+    
+    // Pre-fill shipping address fields in the checkout modal
+    populateAddressForm(selectedAddress, 'shipping');
+    
+    // If "same as shipping" is checked, also pre-fill billing
+    if (sameAsShippingCheckbox.checked) {
+        populateAddressForm(selectedAddress, 'billing');
+        billingSection.style.display = 'none';
+    } else {
+        billingSection.style.display = 'block';
+    }
+
+    // Close profile sidebar and open address modal
+    closeProfileSidebarHandler();
+    addressModal.classList.add('active');
+    overlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+
+    showToast('Address selected for checkout.');
 }
+
+function editAddress(index) {
+    if (!currentUser || !currentUser.addresses || index >= currentUser.addresses.length) return;
+
+    const addressToEdit = currentUser.addresses[index];
+    
+    // Populate the address validation textarea with the address string
+    document.getElementById('addressToValidate').value = 
+        `${addressToEdit.address1}${addressToEdit.address2 ? ', ' + addressToEdit.address2 : ''}, ${addressToEdit.city}, ${addressToEdit.state} - ${addressToEdit.zip}, ${addressToEdit.country}`;
+    
+    // Show the validation result section, ready for re-validation or saving
+    document.getElementById('validationResult').style.display = 'block';
+    document.getElementById('validationResult').className = 'validation-result'; // Reset classes
+    document.getElementById('resultContent').innerHTML = `
+        <h4>Edit Address</h4>
+        <p>Modify the address above and click "Validate Address" to save changes.</p>
+        <button class="btn" id="updateEditedAddress" data-index="${index}">Update Address</button>
+    `;
+
+    document.getElementById('updateEditedAddress')?.addEventListener('click', (e) => {
+        const updatedAddressString = document.getElementById('addressToValidate').value.trim();
+        if (!updatedAddressString) {
+            showToast('Address cannot be empty.');
+            return;
+        }
+        
+        // For simplicity, update only address1 and keep other fields as they were or infer
+        const updatedAddress = {
+            ...addressToEdit, // Keep existing details
+            address1: updatedAddressString, // Update the main address line
+            // You might want to parse the string to update city, state, zip etc.
+            // For this demo, we'll just update address1
+        };
+
+        currentUser.addresses[index] = updatedAddress;
+        saveUserData();
+        renderSavedAddresses(currentUser.addresses);
+        showToast('Address updated successfully!');
+        document.getElementById('validationResult').style.display = 'none';
+        document.getElementById('addressToValidate').value = '';
+    });
+}
+
 
 function removeAddress(index) {
     if (!currentUser || !currentUser.addresses || index >= currentUser.addresses.length) return;
@@ -1528,7 +1555,8 @@ function initializeProfileSections() {
 // Add to global scope for HTML onclick handlers
 window.addToCartFromWishlist = addToCartFromWishlist;
 window.removeFromWishlist = removeFromWishlist;
-window.setDefaultAddress = setDefaultAddress;
+window.selectAddressForCheckout = selectAddressForCheckout; // New global function
+window.editAddress = editAddress; // New global function
 window.removeAddress = removeAddress;
 
 // Initialize the application
@@ -1560,9 +1588,8 @@ function isValidEmail(email) {
 }
 
 // Validate phone number
-function isValidPhone(phone) {
-    return /^[0-9]{10}$/.test(phone);
-}
+
+
 
 // Enhanced Product Filtering
 function enhancedFilterProducts(category, searchTerm = '') {
@@ -1780,37 +1807,198 @@ function showOrderTracking(orderId) {
 
 // Enhanced Checkout Process
 function enhancedCheckout() {
+    if (!currentUser) {
+        showToast('Please login to checkout');
+        toggleAuthModal();
+        return;
+    }
     if (cart.length === 0) {
         showToast('Your cart is empty');
         return;
     }
 
-    if (!currentUser) {
-        showToast('Please login to checkout');
-        switchAuthTab('login');
-        authModal.classList.add('active');
-        overlay.classList.add('active');
-        return;
-    }
-
-    // Check if default address is set (this is a good check, but the address modal handles input)
-    // if (!currentUser.address) {
-    //     showToast('Please set a delivery address first');
-    //     openProfileSidebar();
-    //     showProfileSection('addressValidation');
-    //     return;
-    // }
-
-    // Only open the address modal here. The address modal's continue button will open payment.
-    addressModal.classList.add('active');
+    cartSidebar.classList.remove('active');
     overlay.classList.add('active');
+    addressModal.classList.add('active');
     document.body.style.overflow = 'hidden';
+
+    renderAddressSelection();
 }
 
-// Update checkout button event listener
-// This line is already present in the DOMContentLoaded, ensuring the correct function is used.
-// checkoutBtn.removeEventListener('click', checkout);
-// checkoutBtn.addEventListener('click', enhancedCheckout);
+function renderAddressSelection() {
+    const savedAddresses = currentUser.addresses || [];
+    
+    savedAddressesContainer.innerHTML = ''; // Clear previous content
+    addressFormContainer.style.display = 'none'; // Hide form by default
+
+    if (savedAddresses.length > 0) {
+        savedAddressesContainer.style.display = 'block';
+        savedAddressesContainer.innerHTML = '<h3>Your Saved Addresses</h3>'; // Add title
+
+        savedAddresses.forEach((addr, index) => {
+            const addressElement = document.createElement('div');
+            addressElement.className = `address-option ${addr.isDefault ? 'default' : ''}`;
+            addressElement.innerHTML = `
+                <div class="address-details">
+                    <h4>${addr.name} ${addr.isDefault ? '(Default)' : ''}</h4>
+                    <p>${addr.address1}${addr.address2 ? ', ' + addr.address2 : ''}, ${addr.city}, ${addr.state} - ${addr.zip}</p>
+                    <p>Phone: ${addr.phone}</p>
+                </div>
+                <div class="address-actions">
+                    <button class="btn btn-sm use-address-btn" data-id="${addr.id}">Deliver Here</button>
+                    ${!addr.isDefault ? `<button class="btn btn-outline btn-sm set-default-btn" data-id="${addr.id}">Set Default</button>` : ''}
+                    <button class="btn btn-outline btn-sm delete-address-btn" data-id="${addr.id}">Delete</button>
+                </div>
+            `;
+            savedAddressesContainer.appendChild(addressElement);
+        });
+        
+        // Add "Add New Address" button below saved addresses
+        const addNewBtn = document.createElement('button');
+        addNewBtn.className = 'btn btn-outline';
+        addNewBtn.textContent = 'Add New Address';
+        addNewBtn.style.width = '100%';
+        addNewBtn.style.marginTop = '15px';
+        addNewBtn.addEventListener('click', showAddressFormForNewEntry);
+        savedAddressesContainer.appendChild(addNewBtn);
+
+    } else {
+        // No saved addresses → show form directly
+        showAddressFormForNewEntry();
+    }
+
+    // Add event listeners for address actions (delegated or re-attached)
+    document.querySelectorAll('.use-address-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const addressId = parseInt(e.target.dataset.id);
+            const address = savedAddresses.find(addr => addr.id === addressId);
+            if (address) {
+                // Set this address as the current shipping and billing address for the order
+                currentUser.shipping = address;
+                currentUser.billing = address; // Assuming billing is same as shipping if selected from saved
+                saveUserData();
+                proceedToPayment();
+            }
+        });
+    });
+    
+    document.querySelectorAll('.set-default-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const addressId = parseInt(e.target.dataset.id);
+            if (setDefaultAddress(addressId)) {
+                showToast('Default address updated');
+                renderAddressSelection(); // Re-render to update default status
+            }
+        });
+    });
+    
+    document.querySelectorAll('.delete-address-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const addressId = parseInt(e.target.dataset.id);
+            if (confirm('Are you sure you want to delete this address?')) {
+                if (deleteAddress(addressId)) {
+                    showToast('Address deleted');
+                    renderAddressSelection(); // Re-render after deletion
+                }
+            }
+        });
+    });
+}
+
+// Show modal to enter new address
+function showAddressFormForNewEntry() {
+    savedAddressesContainer.style.display = 'none';
+    addressFormContainer.style.display = 'block';
+    
+    // Clear and pre-fill form with current user info if available
+    populateAddressForm({
+        name: currentUser.name || '',
+        email: currentUser.email || '',
+        phone: currentUser.phone || '',
+        address1: currentUser.address || '', // Use primary address from registration
+        address2: '',
+        city: '',
+        state: '',
+        zip: '',
+        country: 'India'
+    }, 'shipping');
+    
+    // Reset billing section and checkbox
+    sameAsShippingCheckbox.checked = true;
+    billingSection.style.display = 'none';
+    populateAddressForm({}, 'billing'); // Clear billing form
+    
+    // Ensure "Save this address" is checked by default for new entries
+    if (saveAsDefaultCheckbox) {
+        saveAsDefaultCheckbox.checked = true;
+    }
+}
+
+// Proceed to payment after address validation
+function proceedToPayment() {
+    addressModal.classList.remove('active');
+    paymentModal.classList.add('active');
+    
+    // Pre-fill payment method if previously used (not implemented in this snippet)
+    // if (currentUser.preferredPaymentMethod) {
+    //     document.querySelector(`input[name="paymentMethod"][value="${currentUser.preferredPaymentMethod}"]`).checked = true;
+    // }
+}
+
+// Handle address validation and proceed to payment
+function handleAddressValidationAndProceed() {
+    // Clear previous error highlights
+    document.querySelectorAll('.input-error').forEach(el => el.classList.remove('input-error'));
+
+    const shippingAddress = getAddressFromForm('shipping');
+    let billingAddress = {};
+
+    const shippingValidation = validateAddress(shippingAddress, 'shipping');
+    if (!shippingValidation.isValid) {
+        showToast(shippingValidation.message);
+        shippingValidation.missingFields.forEach(field => {
+            markInvalidField(document.getElementById(`shipping${field.charAt(0).toUpperCase() + field.slice(1)}`), false);
+        });
+        if (shippingValidation.invalidField) {
+            markInvalidField(document.getElementById(`shipping${shippingValidation.invalidField.charAt(0).toUpperCase() + shippingValidation.invalidField.slice(1)}`), false);
+        }
+        return;
+    }
+    
+    if (!sameAsShippingCheckbox.checked) {
+        billingAddress = getAddressFromForm('billing');
+        const billingValidation = validateAddress(billingAddress, 'billing');
+        if (!billingValidation.isValid) {
+            showToast(billingValidation.message);
+            billingValidation.missingFields.forEach(field => {
+                markInvalidField(document.getElementById(`billing${field.charAt(0).toUpperCase() + field.slice(1)}`), false);
+            });
+            if (billingValidation.invalidField) {
+                markInvalidField(document.getElementById(`billing${billingValidation.invalidField.charAt(0).toUpperCase() + billingValidation.invalidField.slice(1)}`), false);
+            }
+            return;
+        }
+    } else {
+        billingAddress = shippingAddress;
+    }
+    
+    // Save addresses to user profile if "Save this address" is checked
+    const saveAsDefault = saveAsDefaultCheckbox ? saveAsDefaultCheckbox.checked : false;
+    if (saveAsDefault) {
+        saveUserAddress(shippingAddress, 'shipping', true); // Always set shipping as default if saving
+        if (!isAddressEqual(shippingAddress, billingAddress)) {
+            saveUserAddress(billingAddress, 'billing', false); // Don't set billing as default if different
+        }
+    }
+    
+    // Set current addresses for this order (regardless of saving to profile)
+    currentUser.shipping = shippingAddress;
+    currentUser.billing = billingAddress;
+    saveUserData();
+    
+    // Proceed to payment
+    proceedToPayment();
+}
 
 // Order History with Tracking
 function loadEnhancedOrderHistory() {
@@ -2073,3 +2261,236 @@ document.addEventListener('click', (e) => {
         answer.classList.toggle('active');
     }
 });
+// Enhanced Address Validation System
+// Function to validate name (letters and spaces only)
+function isValidName(name) {
+    return /^[A-Za-z\s]+$/.test(name.trim()) && name.trim().length > 0;
+}
+
+// Function to validate phone number (10 digits)
+function isValidPhone(phone) {
+    return /^\d{10}$/.test(phone.trim());
+}
+
+// Function to validate ZIP code (6 digits)
+function isValidZip(zip) {
+    return /^\d{6}$/.test(zip.trim());
+}
+
+// Function to validate address data
+function validateAddress(address, prefix = '') {
+    const missingFields = [];
+    let invalidField = null;
+    
+    // Check required fields
+    if (!address.name || address.name.trim() === '') {
+        missingFields.push('name');
+    }
+    
+    if (!address.email || address.email.trim() === '') {
+        missingFields.push('email');
+    } else if (!isValidEmail(address.email)) {
+        invalidField = 'email';
+    }
+    
+    if (!address.phone || address.phone.trim() === '') {
+        missingFields.push('phone');
+    } else if (!isValidPhone(address.phone)) {
+        invalidField = 'phone';
+    }
+    
+    if (!address.address1 || address.address1.trim() === '') {
+        missingFields.push('address1');
+    }
+    
+    if (!address.city || address.city.trim() === '') {
+        missingFields.push('city');
+    }
+    
+    if (!address.state || address.state.trim() === '') {
+        missingFields.push('state');
+    }
+    
+    if (!address.zip || address.zip.trim() === '') {
+        missingFields.push('zip');
+    } else if (!isValidZip(address.zip)) {
+        invalidField = 'zip';
+    }
+    
+    if (!address.country || address.country.trim() === '') {
+        missingFields.push('country');
+    }
+    
+    const isValid = missingFields.length === 0 && !invalidField;
+    let message = '';
+    
+    if (missingFields.length > 0) {
+        message = `Please fill in all required ${prefix} address fields: ${missingFields.join(', ')}`;
+    } else if (invalidField) {
+        switch (invalidField) {
+            case 'email':
+                message = `Please enter a valid ${prefix} email address`;
+                break;
+            case 'phone':
+                message = `Please enter a valid ${prefix} phone number (10 digits)`;
+                break;
+            case 'zip':
+                message = `Please enter a valid ${prefix} PIN code (6 digits)`;
+                break;
+            default:
+                message = `Please check the ${prefix} ${invalidField} field`;
+        }
+    }
+    
+    return {
+        isValid,
+        message,
+        missingFields,
+        invalidField
+    };
+}
+
+// Function to highlight invalid fields
+function markInvalidField(fieldElement, isValid) {
+    if (fieldElement) {
+        if (!isValid) {
+            fieldElement.classList.add('input-error');
+        } else {
+            fieldElement.classList.remove('input-error');
+        }
+    }
+}
+
+// Save address to user profile
+function saveUserAddress(addressData, type = 'shipping', setAsDefault = false) {
+    if (!currentUser) return false;
+    
+    // Initialize addresses array if it doesn't exist
+    if (!currentUser.addresses) {
+        currentUser.addresses = [];
+    }
+    
+    // Check if an identical address already exists to prevent duplicates
+    const isDuplicate = currentUser.addresses.some(existingAddr => 
+        existingAddr.name === addressData.name &&
+        existingAddr.phone === addressData.phone &&
+        existingAddr.address1 === addressData.address1 &&
+        existingAddr.city === addressData.city &&
+        existingAddr.state === addressData.state &&
+        existingAddr.zip === addressData.zip
+    );
+
+    if (isDuplicate) {
+        // Optionally, show a toast that address already exists
+        // showToast('This address is already saved.');
+        return false; // Do not save duplicate
+    }
+
+    // Create address object
+    const address = {
+        id: Date.now(), // Unique ID for the address
+        type, // 'shipping' or 'billing'
+        ...addressData,
+        isDefault: setAsDefault,
+        createdAt: new Date().toISOString()
+    };
+    
+    // If setting as default, remove default flag from other addresses of the same type
+    if (setAsDefault) {
+        currentUser.addresses.forEach(addr => {
+            if (addr.type === type) { // Only affect addresses of the same type
+                addr.isDefault = false;
+            }
+        });
+    }
+    
+    // Add the new address
+    currentUser.addresses.push(address);
+    
+    // Also set as current shipping/billing address if it's the default
+    if (setAsDefault) {
+        currentUser[type] = address;
+    }
+    
+    saveUserData();
+    return true;
+}
+
+// Get user addresses
+function getUserAddresses(type = null) {
+    if (!currentUser || !currentUser.addresses) return [];
+    
+    if (type) {
+        return currentUser.addresses.filter(addr => addr.type === type);
+    }
+    
+    return currentUser.addresses;
+}
+
+// Set default address
+function setDefaultAddress(addressId) {
+    if (!currentUser || !currentUser.addresses) return false;
+    
+    const addressToSetDefault = currentUser.addresses.find(addr => addr.id === addressId);
+    if (!addressToSetDefault) return false;
+    
+    // Remove default flag from all addresses of the same type
+    currentUser.addresses.forEach(addr => {
+        if (addr.type === addressToSetDefault.type) {
+            addr.isDefault = false;
+        }
+    });
+    
+    // Set this address as default
+    addressToSetDefault.isDefault = true;
+    
+    // Also update current shipping/billing reference
+    currentUser[addressToSetDefault.type] = addressToSetDefault;
+    
+    saveUserData();
+    return true;
+}
+
+// Delete address
+function deleteAddress(addressId) {
+    if (!currentUser || !currentUser.addresses) return false;
+    
+    const index = currentUser.addresses.findIndex(addr => addr.id === addressId);
+    if (index === -1) return false;
+    
+    const deletedAddress = currentUser.addresses[index];
+    
+    // Remove the address
+    currentUser.addresses.splice(index, 1);
+    
+    // If it was the default, set a new default if available
+    if (deletedAddress.isDefault) {
+        const remainingAddressesOfType = currentUser.addresses.filter(
+            addr => addr.type === deletedAddress.type
+        );
+        
+        if (remainingAddressesOfType.length > 0) {
+            remainingAddressesOfType[0].isDefault = true;
+            currentUser[remainingAddressesOfType[0].type] = remainingAddressesOfType[0];
+        } else {
+            // No more addresses of this type, clear current shipping/billing
+            currentUser[deletedAddress.type] = null;
+        }
+    }
+    
+    saveUserData();
+    return true;
+}
+
+// Add these functions to the global scope if they are called from HTML onclick attributes
+window.useSavedAddress = (addressId) => {
+    const address = currentUser.addresses.find(addr => addr.id === addressId);
+    if (address) {
+        currentUser.shipping = address;
+        currentUser.billing = address; // Assuming billing is same as shipping if selected from saved
+        saveUserData();
+        proceedToPayment();
+    }
+};
+window.setDefaultAddress = setDefaultAddress;
+window.deleteAddress = deleteAddress;
