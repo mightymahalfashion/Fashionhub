@@ -1,4 +1,4 @@
-// Product Data (40+ products with sizes added)
+// Product Data (100+ products with sizes added)
 const products = [
     { id: 1, name: "Men's Casual Shirt", price: 1599, category: "fashion", rating: 4.5, reviews: 128, image: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?q=80", badge: "New", sizes: ['S', 'M', 'L', 'XL'] },
     { id: 2, name: "Women's Summer Dress", price: 2499, category: "fashion", rating: 4.7, reviews: 96, image: "https://images.unsplash.com/photo-1529903384028-929ae4dcc8b3?q=80", badge: "Sale", sizes: ['S', 'M', 'L'] },
@@ -19,7 +19,107 @@ const products = [
     { id: 17, name: "Women's Leggings", price: 1299, category: "fashion", rating: 4.4, reviews: 102, image: "https://images.unsplash.com/photo-1609505848916-c9f6f4bd0b57?q=80", sizes: ['S', 'M', 'L'] },
     { id: 18, name: "Men's Wallet", price: 1799, category: "fashion", rating: 4.3, reviews: 73, image: "https://images.unsplash.com/photo-1582555172866-f73bb12a2ab3?q=80" },
     { id: 19, name: "Women's Scarf Set", price: 999, oldPrice: 1499, category: "fashion", rating: 4.5, reviews: 134, image: "https://images.unsplash.com/photo-1601924994987-69e26d50dc26?q=80", badge: "-33%" },
-    { id: 20, name: "Designer Belt", price: 1999, category: "fashion", rating: 4.2, reviews: 89, image: "https://images.unsplash.com/photo-1582555172866-f73bb12a2ab3?q=80", sizes: ['30', '32', '34', '36'] }
+    { id: 20, name: "Designer Belt", price: 1999, category: "fashion", rating: 4.2, reviews: 89, image: "https://images.unsplash.com/photo-1582555172866-f73bb12a2ab3?q=80", sizes: ['30', '32', '34', '36'] },
+    { id: 21, name: "Men's Polo Shirt", price: 1299, category: "fashion", rating: 4.4, reviews: 112, image: "https://images.unsplash.com/photo-1598033129183-c4f50c736f10?q=80", sizes: ['S', 'M', 'L', 'XL', 'XXL'] },
+    { id: 22, name: "Women's Blouse", price: 1799, category: "fashion", rating: 4.3, reviews: 87, image: "https://images.unsplash.com/photo-1564257631407-4deb1f99d992?q=80", sizes: ['XS', 'S', 'M', 'L'] },
+    { id: 23, name: "Men's Slim Fit Jeans", price: 2499, category: "fashion", rating: 4.5, reviews: 156, image: "https://images.unsplash.com/photo-1542272604-787c3835535d?q=80", sizes: ['30', '32', '34', '36', '38'] },
+    { id: 24, name: "Women's Cardigan", price: 1899, category: "fashion", rating: 4.2, reviews: 78, image: "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?q=80", badge: "New", sizes: ['S', 'M', 'L', 'XL'] },
+    { id: 25, name: "Men's Hoodie", price: 1999, category: "fashion", rating: 4.6, reviews: 203, image: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?q=80", sizes: ['S', 'M', 'L', 'XL', 'XXL'] },
+    { id: 26, name: "Women's Yoga Pants", price: 1599, category: "fashion", rating: 4.7, reviews: 167, image: "https://images.unsplash.com/photo-1506629082955-511b1aa562c8?q=80", sizes: ['XS', 'S', 'M', 'L'] },
+    { id: 27, name: "Men's Blazer", price: 4999, category: "fashion", rating: 4.8, reviews: 92, image: "https://images.unsplash.com/photo-1592878904946-b3cd8ae243d0?q=80", badge: "Premium", sizes: ['38', '40', '42', '44', '46'] },
+    { id: 28, name: "Women's Maxi Dress", price: 2799, category: "fashion", rating: 4.4, reviews: 124, image: "https://images.unsplash.com/photo-1496747611176-843222e1e57c?q=80", sizes: ['S', 'M', 'L', 'XL'] },
+    { id: 29, name: "Men's Cargo Pants", price: 1899, category: "fashion", rating: 4.1, reviews: 86, image: "https://images.unsplash.com/photo-1517438476312-10d79c077509?q=80", sizes: ['30', '32', '34', '36', '38'] },
+    { id: 30, name: "Women's Denim Jacket", price: 2499, oldPrice: 2999, category: "fashion", rating: 4.5, reviews: 143, image: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?q=80", badge: "-17%", sizes: ['XS', 'S', 'M', 'L', 'XL'] },
+    { id: 31, name: "Men's V-Neck T-Shirt", price: 899, category: "fashion", rating: 4.3, reviews: 178, image: "https://images.unsplash.com/photo-1586790170083-2f9ceadc732d?q=80", sizes: ['S', 'M', 'L', 'XL', 'XXL'] },
+    { id: 32, name: "Women's Pencil Skirt", price: 1699, category: "fashion", rating: 4.6, reviews: 97, image: "https://images.unsplash.com/photo-1583496661160-fb5886a0aaaa?q=80", sizes: ['XS', 'S', 'M', 'L'] },
+    { id: 33, name: "Men's Denim Shirt", price: 1799, category: "fashion", rating: 4.4, reviews: 112, image: "https://images.unsplash.com/photo-1589310243389-96a5483213a8?q=80", sizes: ['S', 'M', 'L', 'XL'] },
+    { id: 34, name: "Women's Crop Top", price: 999, category: "fashion", rating: 4.2, reviews: 87, image: "https://images.unsplash.com/photo-1503185912284-5271ff81b9a8?q=80", badge: "Hot", sizes: ['XS', 'S', 'M', 'L'] },
+    { id: 35, name: "Men's Chino Shorts", price: 1299, category: "fashion", rating: 4.3, reviews: 76, image: "https://images.unsplash.com/photo-1565084888279-aca607ecce0c?q=80", sizes: ['30', '32', '34', '36', '38'] },
+    { id: 36, name: "Women's Jumpsuit", price: 2999, category: "fashion", rating: 4.7, reviews: 134, image: "https://images.unsplash.com/photo-1529903384028-929ae4dcc8b3?q=80", sizes: ['XS', 'S', 'M', 'L'] },
+    { id: 37, name: "Men's Sweater", price: 2199, category: "fashion", rating: 4.5, reviews: 98, image: "https://images.unsplash.com/photo-1611312449408-fcece27cdbb7?q=80", sizes: ['S', 'M', 'L', 'XL', 'XXL'] },
+    { id: 38, name: "Women's Palazzo Pants", price: 1899, category: "fashion", rating: 4.4, reviews: 87, image: "https://images.unsplash.com/photo-1509551388413-e18d0ac5d495?q=80", sizes: ['S', 'M', 'L', 'XL'] },
+    { id: 39, name: "Men's Track Pants", price: 1499, category: "fashion", rating: 4.2, reviews: 112, image: "https://images.unsplash.com/photo-1552902865-b72c031ac5ea?q=80", sizes: ['S', 'M', 'L', 'XL', 'XXL'] },
+    { id: 40, name: "Women's Tunic Top", price: 1299, category: "fashion", rating: 4.3, reviews: 76, image: "https://images.unsplash.com/photo-1564257631407-4deb1f99d992?q=80", sizes: ['XS', 'S', 'M', 'L', 'XL'] },
+    { id: 41, name: "Men's Linen Shirt", price: 1899, category: "fashion", rating: 4.6, reviews: 89, image: "https://images.unsplash.com/photo-1598032895397-b9472444bf93?q=80", badge: "Summer", sizes: ['S', 'M', 'L', 'XL'] },
+    { id: 42, name: "Women's Denim Shorts", price: 1199, category: "fashion", rating: 4.4, reviews: 123, image: "https://images.unsplash.com/photo-1591347887817-173e3d3ce731?q=80", sizes: ['XS', 'S', 'M', 'L'] },
+    { id: 43, name: "Men's Bomber Jacket", price: 3499, category: "fashion", rating: 4.7, reviews: 87, image: "https://images.unsplash.com/photo-1551028719-00167b16eac5?q=80", sizes: ['S', 'M', 'L', 'XL'] },
+    { id: 44, name: "Women's Wrap Dress", price: 2499, category: "fashion", rating: 4.5, reviews: 98, image: "https://images.unsplash.com/photo-1529903384028-929ae4dcc8b3?q=80", sizes: ['XS', 'S', 'M', 'L'] },
+    { id: 45, name: "Men's Henley Shirt", price: 1299, category: "fashion", rating: 4.3, reviews: 76, image: "https://images.unsplash.com/photo-1586790170083-2f9ceadc732d?q=80", sizes: ['S', 'M', 'L', 'XL', 'XXL'] },
+    { id: 46, name: "Women's Bodycon Dress", price: 1999, category: "fashion", rating: 4.4, reviews: 112, image: "https://images.unsplash.com/photo-1496747611176-843222e1e57c?q=80", badge: "Trending", sizes: ['XS', 'S', 'M', 'L'] },
+    { id: 47, name: "Men's Puffer Jacket", price: 3999, category: "fashion", rating: 4.6, reviews: 87, image: "https://images.unsplash.com/photo-1551028719-00167b16eac5?q=80", sizes: ['S', 'M', 'L', 'XL', 'XXL'] },
+    { id: 48, name: "Women's Turtleneck Sweater", price: 1899, category: "fashion", rating: 4.5, reviews: 98, image: "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?q=80", sizes: ['XS', 'S', 'M', 'L', 'XL'] },
+    { id: 49, name: "Men's Flannel Shirt", price: 1599, category: "fashion", rating: 4.4, reviews: 123, image: "https://images.unsplash.com/photo-1589310243389-96a5483213a8?q=80", sizes: ['S', 'M', 'L', 'XL', 'XXL'] },
+    { id: 50, name: "Women's Midi Skirt", price: 1799, category: "fashion", rating: 4.3, reviews: 87, image: "https://images.unsplash.com/photo-1583496661160-fb5886a0aaaa?q=80", sizes: ['XS', 'S', 'M', 'L'] },
+    { id: 51, name: "Men's Graphic T-Shirt", price: 999, category: "fashion", rating: 4.2, reviews: 145, image: "https://images.unsplash.com/photo-1586790170083-2f9ceadc732d?q=80", badge: "New", sizes: ['S', 'M', 'L', 'XL', 'XXL'] },
+    { id: 52, name: "Women's Off-Shoulder Top", price: 1399, category: "fashion", rating: 4.5, reviews: 98, image: "https://images.unsplash.com/photo-1564257631407-4deb1f99d992?q=80", sizes: ['XS', 'S', 'M', 'L'] },
+    { id: 53, name: "Men's Ripped Jeans", price: 2299, category: "fashion", rating: 4.3, reviews: 112, image: "https://images.unsplash.com/photo-1542272604-787c3835535d?q=80", sizes: ['30', '32', '34', '36', '38'] },
+    { id: 54, name: "Women's Peplum Top", price: 1599, category: "fashion", rating: 4.4, reviews: 87, image: "https://images.unsplash.com/photo-1564257631407-4deb1f99d992?q=80", sizes: ['XS', 'S', 'M', 'L'] },
+    { id: 55, name: "Men's Quilted Jacket", price: 2999, category: "fashion", rating: 4.6, reviews: 76, image: "https://images.unsplash.com/photo-1551028719-00167b16eac5?q=80", sizes: ['S', 'M', 'L', 'XL'] },
+    { id: 56, name: "Women's Culotte Pants", price: 1899, category: "fashion", rating: 4.3, reviews: 98, image: "https://images.unsplash.com/photo-1509551388413-e18d0ac5d495?q=80", sizes: ['XS', 'S', 'M', 'L'] },
+    { id: 57, name: "Men's Oxford Shirt", price: 1799, category: "fashion", rating: 4.5, reviews: 123, image: "https://images.unsplash.com/photo-1598033129183-c4f50c736f10?q=80", badge: "Classic", sizes: ['S', 'M', 'L', 'XL', 'XXL'] },
+    { id: 58, name: "Women's Shift Dress", price: 2199, category: "fashion", rating: 4.4, reviews: 87, image: "https://images.unsplash.com/photo-1496747611176-843222e1e57c?q=80", sizes: ['XS', 'S', 'M', 'L', 'XL'] },
+    { id: 59, name: "Men's Corduroy Pants", price: 2099, category: "fashion", rating: 4.2, reviews: 76, image: "https://images.unsplash.com/photo-1517438476312-10d79c077509?q=80", sizes: ['30', '32', '34', '36', '38'] },
+    { id: 60, name: "Women's Ruffled Blouse", price: 1499, category: "fashion", rating: 4.3, reviews: 98, image: "https://images.unsplash.com/photo-1564257631407-4deb1f99d992?q=80", sizes: ['XS', 'S', 'M', 'L'] },
+    { id: 61, name: "Men's Varsity Jacket", price: 3299, category: "fashion", rating: 4.5, reviews: 87, image: "https://images.unsplash.com/photo-1551028719-00167b16eac5?q=80", badge: "Trending", sizes: ['S', 'M', 'L', 'XL'] },
+    { id: 62, name: "Women's A-Line Skirt", price: 1699, category: "fashion", rating: 4.4, reviews: 76, image: "https://images.unsplash.com/photo-1583496661160-fb5886a0aaaa?q=80", sizes: ['XS', 'S', 'M', 'L'] },
+    { id: 63, name: "Men's Striped Shirt", price: 1399, category: "fashion", rating: 4.3, reviews: 98, image: "https://images.unsplash.com/photo-1598033129183-c4f50c736f10?q=80", sizes: ['S', 'M', 'L', 'XL', 'XXL'] },
+    { id: 64, name: "Women's Bell Sleeve Top", price: 1599, category: "fashion", rating: 4.2, reviews: 87, image: "https://images.unsplash.com/photo-1564257631407-4deb1f99d992?q=80", sizes: ['XS', 'S', 'M', 'L'] },
+    { id: 65, name: "Men's Distressed Jeans", price: 2399, category: "fashion", rating: 4.4, reviews: 123, image: "https://images.unsplash.com/photo-1542272604-787c3835535d?q=80", sizes: ['30', '32', '34', '36', '38'] },
+    { id: 66, name: "Women's Cold Shoulder Top", price: 1299, category: "fashion", rating: 4.3, reviews: 98, image: "https://images.unsplash.com/photo-1564257631407-4deb1f99d992?q=80", badge: "Sale", sizes: ['XS', 'S', 'M', 'L'] },
+    { id: 67, name: "Men's Windbreaker", price: 2499, category: "fashion", rating: 4.5, reviews: 87, image: "https://images.unsplash.com/photo-1551028719-00167b16eac5?q=80", sizes: ['S', 'M', 'L', 'XL', 'XXL'] },
+    { id: 68, name: "Women's Pleated Skirt", price: 1799, category: "fashion", rating: 4.4, reviews: 76, image: "https://images.unsplash.com/photo-1583496661160-fb5886a0aaaa?q=80", sizes: ['XS', 'S', 'M', 'L'] },
+    { id: 69, name: "Men's Mandarin Collar Shirt", price: 1899, category: "fashion", rating: 4.6, reviews: 98, image: "https://images.unsplash.com/photo-1598033129183-c4f50c736f10?q=80", sizes: ['S', 'M', 'L', 'XL'] },
+    { id: 70, name: "Women's Halter Neck Dress", price: 2299, category: "fashion", rating: 4.5, reviews: 87, image: "https://images.unsplash.com/photo-1496747611176-843222e1e57c?q=80", sizes: ['XS', 'S', 'M', 'L'] },
+    { id: 71, name: "Men's Plaid Shirt", price: 1599, category: "fashion", rating: 4.3, reviews: 123, image: "https://images.unsplash.com/photo-1589310243389-96a5483213a8?q=80", badge: "Classic", sizes: ['S', 'M', 'L', 'XL', 'XXL'] },
+    { id: 72, name: "Women's High-Waisted Jeans", price: 2199, category: "fashion", rating: 4.7, reviews: 145, image: "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?q=80", sizes: ['26', '28', '30', '32', '34'] },
+    { id: 73, name: "Men's Turtleneck Sweater", price: 1999, category: "fashion", rating: 4.4, reviews: 87, image: "https://images.unsplash.com/photo-1611312449408-fcece27cdbb7?q=80", sizes: ['S', 'M', 'L', 'XL'] },
+    { id: 74, name: "Women's Floral Dress", price: 2499, category: "fashion", rating: 4.5, reviews: 98, image: "https://images.unsplash.com/photo-1496747611176-843222e1e57c?q=80", badge: "Summer", sizes: ['XS', 'S', 'M', 'L', 'XL'] },
+    { id: 75, name: "Men's Slim Fit Trousers", price: 2299, category: "fashion", rating: 4.3, reviews: 76, image: "https://images.unsplash.com/photo-1517438476312-10d79c077509?q=80", sizes: ['30', '32', '34', '36', '38'] },
+    { id: 76, name: "Women's Lace Top", price: 1699, category: "fashion", rating: 4.4, reviews: 87, image: "https://images.unsplash.com/photo-1564257631407-4deb1f99d992?q=80", sizes: ['XS', 'S', 'M', 'L'] },
+    { id: 77, name: "Men's Denim Jacket", price: 2799, category: "fashion", rating: 4.6, reviews: 123, image: "https://images.unsplash.com/photo-1551028719-00167b16eac5?q=80", badge: "Vintage", sizes: ['S', 'M', 'L', 'XL', 'XXL'] },
+    { id: 78, name: "Women's Culottes", price: 1899, category: "fashion", rating: 4.3, reviews: 76, image: "https://images.unsplash.com/photo-1509551388413-e18d0ac5d495?q=80", sizes: ['XS', 'S', 'M', 'L'] },
+    { id: 79, name: "Men's Printed T-Shirt", price: 999, category: "fashion", rating: 4.2, reviews: 98, image: "https://images.unsplash.com/photo-1586790170083-2f9ceadc732d?q=80", sizes: ['S', 'M', 'L', 'XL', 'XXL'] },
+    { id: 80, name: "Women's Bodysuit", price: 1499, category: "fashion", rating: 4.4, reviews: 87, image: "https://images.unsplash.com/photo-1564257631407-4deb1f99d992?q=80", sizes: ['XS', 'S', 'M', 'L'] },
+    { id: 81, name: "Men's Cargo Shorts", price: 1399, category: "fashion", rating: 4.1, reviews: 76, image: "https://images.unsplash.com/photo-1565084888279-aca607ecce0c?q=80", badge: "Summer", sizes: ['30', '32', '34', '36', '38'] },
+    { id: 82, name: "Women's Kimono", price: 1999, category: "fashion", rating: 4.5, reviews: 98, image: "https://images.unsplash.com/photo-1529903384028-929ae4dcc8b3?q=80", sizes: ['S/M', 'L/XL'] },
+    { id: 83, name: "Men's Polo Sweater", price: 2299, category: "fashion", rating: 4.4, reviews: 87, image: "https://images.unsplash.com/photo-1611312449408-fcece27cdbb7?q=80", sizes: ['S', 'M', 'L', 'XL'] },
+    { id: 84, name: "Women's Denim Skirt", price: 1599, category: "fashion", rating: 4.3, reviews: 123, image: "https://images.unsplash.com/photo-1583496661160-fb5886a0aaaa?q=80", sizes: ['XS', 'S', 'M', 'L'] },
+    { id: 85, name: "Men's Shawl Collar Cardigan", price: 2499, category: "fashion", rating: 4.6, reviews: 76, image: "https://images.unsplash.com/photo-1611312449408-fcece27cdbb7?q=80", badge: "Premium", sizes: ['S', 'M', 'L', 'XL'] },
+    { id: 86, name: "Women's Boyfriend Jeans", price: 2199, category: "fashion", rating: 4.4, reviews: 98, image: "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?q=80", sizes: ['26', '28', '30', '32', '34'] },
+    { id: 87, name: "Men's Utility Jacket", price: 2999, category: "fashion", rating: 4.5, reviews: 87, image: "https://images.unsplash.com/photo-1551028719-00167b16eac5?q=80", sizes: ['S', 'M', 'L', 'XL', 'XXL'] },
+    { id: 88, name: "Women's Puffer Vest", price: 1899, category: "fashion", rating: 4.3, reviews: 76, image: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?q=80", sizes: ['XS', 'S', 'M', 'L'] },
+    { id: 89, name: "Men's Crewneck Sweatshirt", price: 1699, category: "fashion", rating: 4.4, reviews: 123, image: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?q=80", badge: "Cozy", sizes: ['S', 'M', 'L', 'XL', 'XXL'] },
+    { id: 90, name: "Women's Trench Coat", price: 3999, category: "fashion", rating: 4.7, reviews: 87, image: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?q=80", sizes: ['XS', 'S', 'M', 'L', 'XL'] },
+    { id: 91, name: "Men's Relaxed Fit Jeans", price: 1999, category: "fashion", rating: 4.3, reviews: 98, image: "https://images.unsplash.com/photo-1542272604-787c3835535d?q=80", sizes: ['30', '32', '34', '36', '38', '40'] },
+    { id: 92, name: "Women's Knit Sweater", price: 1799, category: "fashion", rating: 4.5, reviews: 76, image: "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?q=80", badge: "Warm", sizes: ['XS', 'S', 'M', 'L'] },
+    { id: 93, name: "Men's Checkered Shirt", price: 1499, category: "fashion", rating: 4.2, reviews: 87, image: "https://images.unsplash.com/photo-1589310243389-96a5483213a8?q=80", sizes: ['S', 'M', 'L', 'XL', 'XXL'] },
+    { id: 94, name: "Women's Leather Skirt", price: 2499, category: "fashion", rating: 4.4, reviews: 98, image: "https://images.unsplash.com/photo-1583496661160-fb5886a0aaaa?q=80", badge: "Trending", sizes: ['XS', 'S', 'M', 'L'] },
+    { id: 95, name: "Men's Zip-Up Hoodie", price: 1899, category: "fashion", rating: 4.5, reviews: 123, image: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?q=80", sizes: ['S', 'M', 'L', 'XL', 'XXL'] },
+    { id: 96, name: "Women's Capri Pants", price: 1599, category: "fashion", rating: 4.3, reviews: 76, image: "https://images.unsplash.com/photo-1509551388413-e18d0ac5d495?q=80", sizes: ['XS', 'S', 'M', 'L'] },
+    { id: 97, name: "Men's Thermal Henley", price: 1299, category: "fashion", rating: 4.4, reviews: 87, image: "https://images.unsplash.com/photo-1586790170083-2f9ceadc732d?q=80", badge: "Winter", sizes: ['S', 'M', 'L', 'XL'] },
+    { id: 98, name: "Women's Sheath Dress", price: 2799, category: "fashion", rating: 4.6, reviews: 98, image: "https://images.unsplash.com/photo-1496747611176-843222e1e57c?q=80", sizes: ['XS', 'S', 'M', 'L', 'XL'] },
+    { id: 99, name: "Men's Twill Pants", price: 1999, category: "fashion", rating: 4.3, reviews: 76, image: "https://images.unsplash.com/photo-1517438476312-10d79c077509?q=80", sizes: ['30', '32', '34', '36', '38'] },
+    { id: 100, name: "Women's Camisole", price: 899, category: "fashion", rating: 4.2, reviews: 87, image: "https://images.unsplash.com/photo-1564257631407-4deb1f99d992?q=80", sizes: ['XS', 'S', 'M', 'L'] },
+    { id: 101, name: "Men's Pea Coat", price: 4499, category: "fashion", rating: 4.7, reviews: 65, image: "https://images.unsplash.com/photo-1551028719-00167b16eac5?q=80", badge: "Premium", sizes: ['S', 'M', 'L', 'XL'] },
+    { id: 102, name: "Women's Poncho", price: 1799, category: "fashion", rating: 4.4, reviews: 78, image: "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?q=80", sizes: ['S/M', 'L/XL'] },
+    { id: 103, name: "Men's Muscle Fit T-Shirt", price: 1199, category: "fashion", rating: 4.3, reviews: 92, image: "https://images.unsplash.com/photo-1586790170083-2f9ceadc732d?q=80", badge: "Fitness", sizes: ['S', 'M', 'L', 'XL'] },
+    { id: 104, name: "Women's Wrap Skirt", price: 1599, category: "fashion", rating: 4.5, reviews: 83, image: "https://images.unsplash.com/photo-1583496661160-fb5886a0aaaa?q=80", sizes: ['XS', 'S', 'M', 'L'] },
+    { id: 105, name: "Men's Velvet Blazer", price: 4999, category: "fashion", rating: 4.8, reviews: 57, image: "https://images.unsplash.com/photo-1592878904946-b3cd8ae243d0?q=80", badge: "Luxury", sizes: ['38', '40', '42', '44', '46'] },
+    { id: 106, name: "Women's Ruffle Dress", price: 2399, category: "fashion", rating: 4.4, reviews: 74, image: "https://images.unsplash.com/photo-1496747611176-843222e1e57c?q=80", sizes: ['XS', 'S', 'M', 'L'] },
+    { id: 107, name: "Men's Jogger Pants", price: 1699, category: "fashion", rating: 4.5, reviews: 118, image: "https://images.unsplash.com/photo-1552902865-b72c031ac5ea?q=80", badge: "Comfort", sizes: ['S', 'M', 'L', 'XL', 'XXL'] },
+    { id: 108, name: "Women's Bolero Jacket", price: 1899, category: "fashion", rating: 4.3, reviews: 62, image: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?q=80", sizes: ['XS', 'S', 'M', 'L'] },
+    { id: 109, name: "Men's Tuxedo Shirt", price: 2299, category: "fashion", rating: 4.6, reviews: 48, image: "https://images.unsplash.com/photo-1598033129183-c4f50c736f10?q=80", badge: "Formal", sizes: ['S', 'M', 'L', 'XL'] },
+    { id: 110, name: "Women's Harem Pants", price: 1799, category: "fashion", rating: 4.2, reviews: 86, image: "https://images.unsplash.com/photo-1509551388413-e18d0ac5d495?q=80", sizes: ['XS', 'S', 'M', 'L'] },
+    { id: 111, name: "Men's Raglan Shirt", price: 1299, category: "fashion", rating: 4.3, reviews: 73, image: "https://images.unsplash.com/photo-1586790170083-2f9ceadc732d?q=80", sizes: ['S', 'M', 'L', 'XL', 'XXL'] },
+    { id: 112, name: "Women's Peasant Blouse", price: 1499, category: "fashion", rating: 4.4, reviews: 91, image: "https://images.unsplash.com/photo-1564257631407-4deb1f99d992?q=80", badge: "Boho", sizes: ['XS', 'S', 'M', 'L'] },
+    { id: 113, name: "Men's Sherpa Jacket", price: 3299, category: "fashion", rating: 4.7, reviews: 67, image: "https://images.unsplash.com/photo-1551028719-00167b16eac5?q=80", badge: "Winter", sizes: ['S', 'M', 'L', 'XL'] },
+    { id: 114, name: "Women's Tennis Skirt", price: 1399, category: "fashion", rating: 4.5, reviews: 82, image: "https://images.unsplash.com/photo-1583496661160-fb5886a0aaaa?q=80", badge: "Sport", sizes: ['XS', 'S', 'M', 'L'] },
+    { id: 115, name: "Men's Pinstripe Shirt", price: 1899, category: "fashion", rating: 4.4, reviews: 58, image: "https://images.unsplash.com/photo-1598033129183-c4f50c736f10?q=80", badge: "Business", sizes: ['S', 'M', 'L', 'XL', 'XXL'] },
+    { id: 116, name: "Women's Tiered Dress", price: 2599, category: "fashion", rating: 4.6, reviews: 74, image: "https://images.unsplash.com/photo-1496747611176-843222e1e57c?q=80", sizes: ['XS', 'S', 'M', 'L'] },
+    { id: 117, name: "Men's Fleece Pullover", price: 1799, category: "fashion", rating: 4.3, reviews: 93, image: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?q=80", badge: "Cozy", sizes: ['S', 'M', 'L', 'XL', 'XXL'] },
+    { id: 118, name: "Women's Cigarette Pants", price: 1999, category: "fashion", rating: 4.5, reviews: 68, image: "https://images.unsplash.com/photo-1509551388413-e18d0ac5d495?q=80", sizes: ['XS', 'S', 'M', 'L'] },
+    { id: 119, name: "Men's Anorak Jacket", price: 2799, category: "fashion", rating: 4.4, reviews: 57, image: "https://images.unsplash.com/photo-1551028719-00167b16eac5?q=80", badge: "Outdoor", sizes: ['S', 'M', 'L', 'XL'] },
+    { id: 120, name: "Women's Slip Dress", price: 1899, category: "fashion", rating: 4.3, reviews: 81, image: "https://images.unsplash.com/photo-1496747611176-843222e1e57c?q=80", sizes: ['XS', 'S', 'M', 'L'] }
 ];
 
 // Shopping cart
@@ -366,8 +466,17 @@ function addToCart(e) {
     const productId = parseInt(e.target.dataset.id);
     const product = products.find(p => p.id === productId);
     const sizeSelect = e.target.closest('.product-card').querySelector('.size-select');
+     // If the product has sizes but no selection was made
+     if (sizeSelect) {
+        const size = sizeSelect.value;
+        if (!size || size.trim() === "") {
+            showToast("Please select a size before adding to cart");
+            sizeSelect.focus();
+            return; // Stop execution
+        }
+    }
     const size = sizeSelect ? sizeSelect.value : null;
-
+     
     // Check if product is already in cart with same size
     const existingItem = cart.find(item => item.id === productId && (!size || item.size === size));
 
@@ -385,7 +494,7 @@ function addToCart(e) {
     }
 
     updateCartCount();
-    showToast('Item added to cart!');
+    showToast(`Item added to cart${size ? " (" + size + ")" : ""}!`);
 
     // If cart is open, update it
     if (cartSidebar.classList.contains('active')) {
@@ -1565,7 +1674,48 @@ window.onload = function() {
     renderProducts(products);
     updateCartCount();
     updateWishlistCount();
+    
+    // Initialize scroll animations
+    initScrollAnimations();
 };
+
+// Scroll animations
+function initScrollAnimations() {
+    // Add animation classes to elements
+    document.querySelectorAll('.section-title').forEach(el => {
+        el.classList.add('fade-in');
+    });
+    
+    document.querySelectorAll('.category-card').forEach((el, index) => {
+        if (index % 2 === 0) {
+            el.classList.add('slide-in-left');
+        } else {
+            el.classList.add('slide-in-right');
+        }
+    });
+    
+    document.querySelectorAll('.product-card').forEach(el => {
+        el.classList.add('fade-in');
+    });
+    
+    // Check for elements in viewport on scroll
+    function checkVisibility() {
+        const elements = document.querySelectorAll('.fade-in, .slide-in-left, .slide-in-right');
+        elements.forEach(element => {
+            const position = element.getBoundingClientRect();
+            // If element is in viewport
+            if(position.top < window.innerHeight && position.bottom >= 0) {
+                element.classList.add('visible');
+            }
+        });
+    }
+    
+    // Initial check
+    checkVisibility();
+    
+    // Check on scroll
+    window.addEventListener('scroll', checkVisibility);
+}
 // Additional Utility Functions
 
 // Format currency
