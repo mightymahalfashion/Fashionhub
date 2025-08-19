@@ -1006,6 +1006,70 @@
             </div>
         </div>
     </footer>
+
+    <!-- Welcome Popup -->
+    <div class="welcome-popup" id="welcomePopup">
+        <div class="welcome-popup-content">
+            <button class="close-welcome-popup" id="closeWelcomePopup">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="welcome-popup-header">
+                <div class="welcome-icon">
+                    <i class="fas fa-crown"></i>
+                </div>
+                <h2>Welcome to Mighty Mahal!</h2>
+            </div>
+            <div class="welcome-popup-body">
+                <p>🎉 <strong>Special Offer!</strong> Get 20% off on your first order</p>
+                <p>✨ Discover amazing products at unbeatable prices</p>
+                <p>🚚 Free shipping on orders over ₹500</p>
+                <p>💬 Need help? Our chatbot is here to assist you!</p>
+            </div>
+            <div class="welcome-popup-actions">
+                <button class="welcome-btn primary" onclick="document.getElementById('closeWelcomePopup').click(); document.getElementById('chatbotToggle').click();">
+                    Chat with us
+                </button>
+                <button class="welcome-btn secondary" onclick="document.getElementById('closeWelcomePopup').click();">
+                    Start Shopping
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chatbot -->
+    <div class="chatbot-toggle" id="chatbotToggle">
+        <i class="fas fa-comments"></i>
+        <span class="chatbot-badge">💬</span>
+    </div>
+
+    <div class="chatbot-container" id="chatbotContainer">
+        <div class="chatbot-header">
+            <div class="chatbot-header-info">
+                <div class="chatbot-avatar">
+                    <i class="fas fa-crown"></i>
+                </div>
+                <div class="chatbot-title">
+                    <h3>Mighty Mahal Assistant</h3>
+                    <span class="chatbot-status">Online</span>
+                </div>
+            </div>
+            <button class="close-chatbot" id="closeChatbot">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <div class="chatbot-messages" id="chatMessages">
+            <!-- Messages will be added here dynamically -->
+        </div>
+        
+        <div class="chatbot-input">
+            <input type="text" id="chatInput" placeholder="Type your message...">
+            <button id="sendMessage">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+
     <script src="script.js"></script>
 </body>
 
