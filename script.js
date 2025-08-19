@@ -2644,3 +2644,245 @@ window.useSavedAddress = (addressId) => {
 };
 window.setDefaultAddress = setDefaultAddress;
 window.deleteAddress = deleteAddress;
+
+// ===== CHATBOT FUNCTIONALITY =====
+
+// Chatbot functionality
+function initializeChatbot() {
+    const chatbotToggle = document.getElementById('chatbotToggle');
+    const chatbotContainer = document.getElementById('chatbotContainer');
+    const closeChatbot = document.getElementById('closeChatbot');
+    const chatMessages = document.getElementById('chatMessages');
+    const chatInput = document.getElementById('chatInput');
+    const sendMessage = document.getElementById('sendMessage');
+    const welcomePopup = document.getElementById('welcomePopup');
+    const closeWelcomePopup = document.getElementById('closeWelcomePopup');
+
+    if (!chatbotToggle || !chatbotContainer) return; // Exit if elements don't exist
+
+    // Show welcome popup after 2 seconds
+    setTimeout(() => {
+        if (welcomePopup) {
+            welcomePopup.style.display = 'block';
+            setTimeout(() => {
+                welcomePopup.classList.add('show');
+            }, 100);
+        }
+    }, 2000);
+
+    // Close welcome popup
+    if (closeWelcomePopup) {
+        closeWelcomePopup.addEventListener('click', () => {
+            welcomePopup.classList.remove('show');
+            setTimeout(() => {
+                welcomePopup.style.display = 'none';
+            }, 300);
+        });
+    }
+
+    // Auto close welcome popup after 10 seconds
+    setTimeout(() => {
+        if (welcomePopup && welcomePopup.classList.contains('show')) {
+            welcomePopup.classList.remove('show');
+            setTimeout(() => {
+                welcomePopup.style.display = 'none';
+            }, 300);
+        }
+    }, 12000);
+
+    // Toggle chatbot
+    chatbotToggle.addEventListener('click', () => {
+        chatbotContainer.classList.toggle('active');
+        if (chatbotContainer.classList.contains('active')) {
+            chatInput.focus();
+        }
+    });
+
+    // Close chatbot
+    if (closeChatbot) {
+        closeChatbot.addEventListener('click', () => {
+            chatbotContainer.classList.remove('active');
+        });
+    }
+
+    // Send message
+    function sendChatMessage() {
+        const message = chatInput.value.trim();
+        if (message) {
+            addMessage(message, 'user');
+            chatInput.value = '';
+            
+            // Simulate bot response
+            setTimeout(() => {
+                const response = getBotResponse(message);
+                addMessage(response, 'bot');
+            }, 1000);
+        }
+    }
+
+    if (sendMessage) {
+        sendMessage.addEventListener('click', sendChatMessage);
+    }
+    
+    if (chatInput) {
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendChatMessage();
+            }
+        });
+    }
+
+    // Add message to chat
+    function addMessage(message, sender) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `chat-message ${sender}`;
+        
+        if (sender === 'bot') {
+            messageDiv.innerHTML = `
+                <div class="message-avatar">
+                    <i class="fas fa-crown"></i>
+                </div>
+                <div class="message-content">${message}</div>
+            `;
+        } else {
+            messageDiv.innerHTML = `
+                <div class="message-content">${message}</div>
+                <div class="message-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+            `;
+        }
+        
+        chatMessages.appendChild(messageDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    // Add options message
+    function addOptionsMessage() {
+        const optionsDiv = document.createElement('div');
+        optionsDiv.className = 'chat-message bot';
+        optionsDiv.innerHTML = `
+            <div class="message-avatar">
+                <i class="fas fa-crown"></i>
+            </div>
+            <div class="message-content options-message">
+                <p>Choose what you'd like to know about:</p>
+                <div class="chat-options">
+                    <button class="chat-option" onclick="handleOptionClick('products')">
+                        <i class="fas fa-shopping-bag"></i> Our Products
+                    </button>
+                    <button class="chat-option" onclick="handleOptionClick('shipping')">
+                        <i class="fas fa-truck"></i> Shipping Info
+                    </button>
+                    <button class="chat-option" onclick="handleOptionClick('returns')">
+                        <i class="fas fa-undo"></i> Returns Policy
+                    </button>
+                    <button class="chat-option" onclick="handleOptionClick('contact')">
+                        <i class="fas fa-phone"></i> Contact Us
+                    </button>
+                    <button class="chat-option" onclick="handleOptionClick('deals')">
+                        <i class="fas fa-tags"></i> Current Deals
+                    </button>
+                    <button class="chat-option" onclick="handleOptionClick('account')">
+                        <i class="fas fa-user"></i> Account Help
+                    </button>
+                </div>
+            </div>
+        `;
+        chatMessages.appendChild(optionsDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    // Handle option clicks
+    window.handleOptionClick = function(option) {
+        // Add user message showing what they selected
+        addMessage(`Tell me about ${option}`, 'user');
+        
+        // Get appropriate response
+        setTimeout(() => {
+            let response = '';
+            switch(option) {
+                case 'products':
+                    response = "We have a wide range of products including:<br>• Electronics & Gadgets<br>• Fashion & Clothing<br>• Home & Garden<br>• Sports & Fitness<br>• Beauty & Personal Care<br><br>You can browse our categories or use the search function to find specific items!";
+                    break;
+                case 'shipping':
+                    response = "🚚 <strong>Shipping Information:</strong><br>• Standard delivery: 3-5 business days<br>• Express delivery: 1-2 business days<br>• Free shipping on orders over ₹500<br>• Same-day delivery available in select cities<br>• Track your order anytime with order ID";
+                    break;
+                case 'returns':
+                    response = "🔄 <strong>Returns & Exchange Policy:</strong><br>• 30-day hassle-free returns<br>• Items must be in original condition<br>• Free return pickup available<br>• Instant refunds to original payment method<br>• Exchange available for size/color changes";
+                    break;
+                case 'contact':
+                    response = "📞 <strong>Contact Information:</strong><br>• Phone: +91 9876543210<br>• Email: support@mightymahal.com<br>• Address: Gomti Nagar, Lucknow, UP<br>• Support Hours: Mon-Fri, 9 AM - 8 PM<br>• Live Chat: Available 24/7";
+                    break;
+                case 'deals':
+                    response = "🎉 <strong>Current Offers:</strong><br>• 20% off on first order<br>• Buy 2 Get 1 Free on fashion items<br>• Flat ₹200 off on orders above ₹1000<br>• Free shipping on all orders<br>• Special weekend flash sales<br><br>Check our deals section for more!";
+                    break;
+                case 'account':
+                    response = "👤 <strong>Account Help:</strong><br>• Create account for faster checkout<br>• Track your orders easily<br>• Save favorite items to wishlist<br>• Get personalized recommendations<br>• Manage addresses and payments<br><br>Click the profile icon to get started!";
+                    break;
+                default:
+                    response = "I'm here to help! What would you like to know more about?";
+            }
+            addMessage(response, 'bot');
+        }, 1000);
+    }
+
+    // Bot responses
+    function getBotResponse(message) {
+        const lowerMessage = message.toLowerCase();
+        
+        if (lowerMessage.includes('hello') || lowerMessage.includes('hi') || lowerMessage.includes('hey')) {
+            setTimeout(() => {
+                addOptionsMessage();
+            }, 500);
+            return "Hello! Welcome to Mighty Mahal! 👋 How can I help you today?";
+        }
+        
+        if (lowerMessage.includes('product') || lowerMessage.includes('item')) {
+            return "We have a wide range of products including electronics, fashion, home & garden, and more! You can browse our categories or use the search function to find specific items.";
+        }
+        
+        if (lowerMessage.includes('shipping') || lowerMessage.includes('delivery')) {
+            return "We offer fast and reliable shipping! Standard delivery takes 3-5 business days, and express delivery is available for 1-2 days. Free shipping on orders over ₹500!";
+        }
+        
+        if (lowerMessage.includes('return') || lowerMessage.includes('exchange')) {
+            return "We have a hassle-free 30-day return policy! Items must be in original condition. You can initiate returns through your account or contact our support team.";
+        }
+        
+        if (lowerMessage.includes('contact') || lowerMessage.includes('support')) {
+            return "You can reach us at:<br>📞 +91 9876543210<br>📧 support@mightymahal.com<br>🏪 Visit our store in Gomti Nagar, Lucknow<br>Our support team is available Mon-Fri, 9 AM - 8 PM.";
+        }
+        
+        if (lowerMessage.includes('payment') || lowerMessage.includes('pay')) {
+            return "We accept all major payment methods including credit/debit cards, UPI, net banking, and cash on delivery. All transactions are secure and encrypted.";
+        }
+        
+        if (lowerMessage.includes('account') || lowerMessage.includes('profile')) {
+            return "You can create an account to track orders, save favorites, and get personalized recommendations. Click on the profile icon in the top right to get started!";
+        }
+        
+        if (lowerMessage.includes('deal') || lowerMessage.includes('offer') || lowerMessage.includes('discount')) {
+            return "Check out our amazing deals section for the latest offers! We regularly update with flash sales, seasonal discounts, and exclusive member deals.";
+        }
+        
+        if (lowerMessage.includes('thank')) {
+            return "You're welcome! Is there anything else I can help you with? 😊";
+        }
+        
+        if (lowerMessage.includes('bye') || lowerMessage.includes('goodbye')) {
+            return "Goodbye! Thanks for visiting Mighty Mahal. Have a great day! 👋";
+        }
+        
+        // Default response
+        return "I'm here to help! You can ask me about our products, shipping, returns, payments, or any other questions about Mighty Mahal. What would you like to know?";
+    }
+
+    // Add initial bot message
+    setTimeout(() => {
+        addMessage("Hi there! I'm your Mighty Mahal assistant. How can I help you today? 😊", 'bot');
+    }, 500);
+}
+
+// Initialize chatbot when DOM is loaded
+document.addEventListener('DOMContentLoaded', initializeChatbot);
