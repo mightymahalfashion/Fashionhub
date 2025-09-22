@@ -154,6 +154,13 @@ const loginForm = document.getElementById('loginForm');
 const registerForm = document.getElementById('registerForm');
 const loginBtn = document.getElementById('loginBtn');
 const registerBtn = document.getElementById('registerBtn');
+// OTP-related DOM elements
+const sendOtpBtn = document.getElementById('sendOtpBtn');
+const verifyOtpBtn = document.getElementById('verifyOtpBtn');
+const registerOtp = document.getElementById('registerOtp');
+const otpSection = document.getElementById('otpSection');
+const otpStatus = document.getElementById('otpStatus');
+
 const checkoutBtn = document.getElementById('checkoutBtn');
 const addressModal = document.getElementById('addressModal');
 const closeAddressModal = document.getElementById('closeAddressModal');
@@ -248,6 +255,10 @@ document.addEventListener('DOMContentLoaded', () => {
     registerTab.addEventListener('click', () => switchAuthTab('register'));
     loginBtn.addEventListener('click', loginUser);
     registerBtn.addEventListener('click', registerUser);
+
+    // OTP listeners (registration only)
+    if (sendOtpBtn) sendOtpBtn.addEventListener('click', handleSendOtp);
+    if (verifyOtpBtn) verifyOtpBtn.addEventListener('click', handleVerifyOtp);
     
     // Modified checkout button listener to use enhancedCheckout
     checkoutBtn.removeEventListener('click', checkout); // Remove the old listener if it exists
@@ -768,6 +779,63 @@ function saveUserData() {
     localStorage.setItem('mm_users', JSON.stringify(users)); // Ensure users array is saved
 }
 
+// In-memory OTP state (reset on reload). For production, replace with backend SMS/email service.
+let pendingOtp = null; // { email, phone, code, expiresAt, verified }
+
+function handleSendOtp() {
+    const email = (document.getElementById('registerEmail')?.value || '').trim();
+    const phone = (document.getElementById('registerPhone')?.value || '').trim();
+    const name = (document.getElementById('registerName')?.value || '').trim();
+    const password = (document.getElementById('registerPassword')?.value || '').trim();
+    
+    // Basic checks before sending OTP
+    if (!name || !email || !password || !phone) {
+        showToast('Fill all fields before requesting OTP');
+        return;
+    }
+    if (users.find(u => u.email === email)) {
+        showToast('Email already registered');
+        return;
+    }
+
+    // Generate 6-digit OTP and set 5-min expiry
+    const code = Math.floor(100000 + Math.random() * 900000).toString();
+    const expiresAt = Date.now() + 5 * 60 * 1000;
+    pendingOtp = { email, phone, code, expiresAt, verified: false };
+
+    // Show OTP UI + feedback
+    if (otpSection) otpSection.style.display = 'block';
+    if (otpStatus) otpStatus.textContent = 'OTP sent. Check console for demo.';
+
+    // Demo: log OTP so you can test manually
+    console.log('[Demo OTP]', code, 'valid until', new Date(expiresAt).toLocaleTimeString());
+
+    showToast('OTP sent');
+}
+
+function handleVerifyOtp() {
+    const input = (registerOtp?.value || '').trim();
+    if (!pendingOtp) {
+        showToast('Please request OTP first');
+        return;
+    }
+    if (Date.now() > pendingOtp.expiresAt) {
+        showToast('OTP expired. Please request again');
+        pendingOtp = null;
+        if (otpStatus) otpStatus.textContent = 'OTP expired';
+        return;
+    }
+    if (input !== pendingOtp.code) {
+        showToast('Incorrect OTP');
+        if (otpStatus) otpStatus.textContent = 'Incorrect OTP';
+        return;
+    }
+
+    pendingOtp.verified = true;
+    if (otpStatus) otpStatus.textContent = 'OTP verified ✓';
+    showToast('OTP verified');
+}
+
 function registerUser() {
     const name = document.getElementById('registerName').value;
     const email = document.getElementById('registerEmail').value;
@@ -778,6 +846,20 @@ function registerUser() {
     // Simple validation
     if (!name || !email || !password || !address || !phone) {
         showToast('Please fill all fields');
+        return;
+    }
+
+    // Enforce OTP for new registrations
+    if (!pendingOtp || pendingOtp.email !== email || pendingOtp.phone !== phone) {
+        showToast('Please send OTP before registering');
+        return;
+    }
+    if (Date.now() > pendingOtp.expiresAt) {
+        showToast('OTP expired. Please request again');
+        return;
+    }
+    if (!pendingOtp.verified) {
+        showToast('Please verify OTP to continue');
         return;
     }
 
@@ -817,6 +899,12 @@ function registerUser() {
     currentUser = newUser;
     saveUserData(); // Save currentUser
     updateSidebarUserInfo();
+
+    // Clear OTP state after success
+    pendingOtp = null;
+    if (otpSection) otpSection.style.display = 'none';
+    if (registerOtp) registerOtp.value = '';
+    if (otpStatus) otpStatus.textContent = '';
 
     showToast('Registration successful!');
     closeAuthModalHandler();
@@ -2886,3 +2974,23 @@ function initializeChatbot() {
 
 // Initialize chatbot when DOM is loaded
 document.addEventListener('DOMContentLoaded', initializeChatbot);
+
+
+// Auto-fill test login credentials when login modal opens
+document.addEventListener("DOMContentLoaded", () => {
+    const authModal = document.getElementById("authModal");
+    const loginEmail = document.getElementById("loginEmail");
+    const loginPassword = document.getElementById("loginPassword");
+
+    if (authModal && loginEmail && loginPassword) {
+        // Watch for modal open
+        const observer = new MutationObserver(() => {
+            if (authModal.style.display !== "none") {
+                loginEmail.value = "test@mightymahal.com";
+                loginPassword.value = "Test@123";
+            }
+        });
+
+        observer.observe(authModal, { attributes: true, attributeFilter: ["style"] });
+    }
+});
