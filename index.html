@@ -96,7 +96,19 @@
                     <label for="registerPhone">Phone</label>
                     <input type="tel" id="registerPhone" required>
                 </div>
-                <div class="form-actions">
+                
+                <div class="form-actions" style="gap:10px; display:flex; flex-wrap:wrap;">
+                    <button type="button" class="btn btn-outline" id="sendOtpBtn">Send OTP</button>
+                    <div id="otpSection" style="display:none; width:100%;">
+                        <div class="form-group">
+                            <label for="registerOtp">Enter OTP</label>
+                            <input type="text" id="registerOtp" placeholder="6-digit code">
+                        </div>
+                        <div class="form-actions" style="display:flex; gap:10px;">
+                            <button type="button" class="btn" id="verifyOtpBtn">Verify OTP</button>
+                            <small id="otpStatus" style="align-self:center;"></small>
+                        </div>
+                    </div>
                     <button type="button" class="btn" id="registerBtn">Register</button>
                 </div>
             </form>
@@ -952,7 +964,37 @@
         <!-- Content from file.html -->
     </div>
 </div>
-    <!-- Footer -->
+    
+<!-- About Us Section -->
+<section class="company-info" id="about">
+    <div class="container">
+        <h2 class="section-title">About Us</h2>
+        <div class="info-grid">
+            <div class="info-card">
+                <h3>Our Legal Identity</h3>
+                <p><strong>Company Name:</strong> Mighty Mahal E-Commerce Pvt. Ltd.</p>
+                <p><strong>Registered Address:</strong> Mumbai, Maharashtra, India</p>
+                <p><strong>GSTIN:</strong> <span class="gst-badge">27ABCDE1234F1Z5</span></p>
+            </div>
+            <div class="info-card">
+                <h3>Our Products</h3>
+                <p>We specialize in premium fashion and lifestyle products including apparel, footwear, accessories, and home essentials. Our curated collection ensures quality, authenticity, and style.</p>
+            </div>
+            <div class="info-card">
+                <h3>Our Mission & Goals</h3>
+                <ul class="info-list">
+                    <li><i class="fas fa-check-circle"></i> Deliver top-quality products at fair prices.</li>
+                    <li><i class="fas fa-check-circle"></i> Provide a seamless and secure shopping experience.</li>
+                    <li><i class="fas fa-check-circle"></i> Support Indian artisans and sustainable fashion.</li>
+                    <li><i class="fas fa-check-circle"></i> Become India’s most trusted premium e-commerce brand.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- Footer -->
     <footer>
         <div class="container">
             <div class="footer-grid">
@@ -988,6 +1030,7 @@
                         <li><a href="file.html#returns-page">Returns & Exchanges</a></li>
                         <li><a href="file.html#privacy-page">Privacy Policy</a></li>
                         <li><a href="file.html#terms-page">Terms & Conditions</a></li>
+<li><a href='#cancellation-policy' class='service-link'>Cancellation Policy</a></li>
                     </ul>
                 </div>
                 <div class="footer-col">
