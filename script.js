@@ -216,7 +216,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Ensure address modal is also closed if overlay is clicked
         addressModal.classList.remove('active');
     });
-    
+
     wishlistIcon.addEventListener('click', () => {
         if (currentUser) {
             openProfileSidebar();
@@ -249,7 +249,7 @@ document.addEventListener('DOMContentLoaded', () => {
             toggleAuthModal();
         }
     });
-    
+
     closeAuthModal.addEventListener('click', closeAuthModalHandler);
     loginTab.addEventListener('click', () => switchAuthTab('login'));
     registerTab.addEventListener('click', () => switchAuthTab('register'));
@@ -259,14 +259,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // OTP listeners (registration only)
     if (sendOtpBtn) sendOtpBtn.addEventListener('click', handleSendOtp);
     if (verifyOtpBtn) verifyOtpBtn.addEventListener('click', handleVerifyOtp);
-    
+
     // Modified checkout button listener to use enhancedCheckout
     checkoutBtn.removeEventListener('click', checkout); // Remove the old listener if it exists
     checkoutBtn.addEventListener('click', enhancedCheckout); // Add the new enhanced listener
 
     closePaymentModal.addEventListener('click', closePaymentModalHandler);
     placeOrderBtn.addEventListener('click', placeOrder);
-    
+
     // Close address modal listener
     closeAddressModal.addEventListener('click', () => {
         addressModal.classList.remove('active');
@@ -292,7 +292,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // **Crucial Change Here:**
     // This event listener now handles the transition from address validation to payment.
     validateAddressContinueBtn.addEventListener('click', handleAddressValidationAndProceed);
-    
+
     // Event listener for "Add New Address" button in the address selection modal
     if (addNewAddressFormBtn) {
         addNewAddressFormBtn.addEventListener('click', showAddressFormForNewEntry);
@@ -310,7 +310,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 logoutUser();
                 return;
             }
-            
+
             const section = item.dataset.section;
             if (section) {
                 profileSidebarItems.forEach(i => i.classList.remove('active'));
@@ -323,7 +323,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Helper to get address from form fields
 function getAddressFromForm(prefix) {
-    const val = (id, def='') => {
+    const val = (id, def = '') => {
         const el = document.getElementById(`${prefix}${id}`);
         return el ? (el.value || '').trim() : def;
     };
@@ -336,13 +336,13 @@ function getAddressFromForm(prefix) {
         city: val('City'),
         state: val('State'),
         zip: val('Zip'),
-        country: val('Country','India')
+        country: val('Country', 'India')
     };
 }
 
 // Helper to populate form fields with address data
 function populateAddressForm(address, prefix) {
-    const setVal = (id, value='') => {
+    const setVal = (id, value = '') => {
         const el = document.getElementById(`${prefix}${id}`);
         if (el) el.value = value;
     };
@@ -477,8 +477,8 @@ function addToCart(e) {
     const productId = parseInt(e.target.dataset.id);
     const product = products.find(p => p.id === productId);
     const sizeSelect = e.target.closest('.product-card').querySelector('.size-select');
-     // If the product has sizes but no selection was made
-     if (sizeSelect) {
+    // If the product has sizes but no selection was made
+    if (sizeSelect) {
         const size = sizeSelect.value;
         if (!size || size.trim() === "") {
             showToast("Please select a size before adding to cart");
@@ -487,7 +487,7 @@ function addToCart(e) {
         }
     }
     const size = sizeSelect ? sizeSelect.value : null;
-     
+
     // Check if product is already in cart with same size
     const existingItem = cart.find(item => item.id === productId && (!size || item.size === size));
 
@@ -787,7 +787,7 @@ function handleSendOtp() {
     const phone = (document.getElementById('registerPhone')?.value || '').trim();
     const name = (document.getElementById('registerName')?.value || '').trim();
     const password = (document.getElementById('registerPassword')?.value || '').trim();
-    
+
     // Basic checks before sending OTP
     if (!name || !email || !password || !phone) {
         showToast('Fill all fields before requesting OTP');
@@ -942,14 +942,14 @@ function logoutUser() {
 // Open profile sidebar
 function openProfileSidebar() {
     if (!profileSidebar) return;
-    
+
     profileSidebar.classList.add('active');
     overlay.classList.add('active');
     document.body.style.overflow = 'hidden';
-    
+
     // Update user info in sidebar
     updateSidebarUserInfo();
-    
+
     // Load dashboard by default
     showProfileSection('dashboard');
 }
@@ -957,7 +957,7 @@ function openProfileSidebar() {
 // Close profile sidebar
 function closeProfileSidebarHandler() {
     if (!profileSidebar) return;
-    
+
     profileSidebar.classList.remove('active');
     overlay.classList.remove('active');
     document.body.style.overflow = '';
@@ -976,14 +976,14 @@ function showProfileSection(sectionName) {
     allSections.forEach(section => {
         section.classList.remove('active');
     });
-    
+
     // Show selected section
     const targetSection = document.getElementById(sectionName + 'Section');
     if (targetSection) {
         targetSection.classList.add('active');
-        
+
         // Load section-specific data
-        switch(sectionName) {
+        switch (sectionName) {
             case 'dashboard':
                 loadDashboardData();
                 break;
@@ -1011,21 +1011,21 @@ function showProfileSection(sectionName) {
 
 function loadDashboardData() {
     if (!currentUser) return;
-    
+
     // Load dashboard statistics
     const orders = JSON.parse(localStorage.getItem('mm_orders') || '[]');
     const userOrders = orders.filter(order => order.userId === currentUser.id);
     const totalSpent = userOrders.reduce((sum, order) => sum + order.total, 0);
-    
+
     // Update stats
     const totalOrdersEl = document.getElementById('totalOrders');
     const totalWishlistEl = document.getElementById('totalWishlist');
     const totalSpentEl = document.getElementById('totalSpent');
-    
+
     if (totalOrdersEl) totalOrdersEl.textContent = userOrders.length;
     if (totalWishlistEl) totalWishlistEl.textContent = wishlist.length;
     if (totalSpentEl) totalSpentEl.textContent = `₹${totalSpent.toFixed(2)}`;
-    
+
     // Load recent activity
     loadRecentActivity();
 }
@@ -1033,17 +1033,17 @@ function loadDashboardData() {
 function loadRecentActivity() {
     const recentActivityList = document.getElementById('recentActivityList');
     if (!recentActivityList || !currentUser) return;
-    
+
     const orders = JSON.parse(localStorage.getItem('mm_orders') || '[]');
     const userOrders = orders.filter(order => order.userId === currentUser.id)
-                           .sort((a, b) => new Date(b.date) - new Date(a.date))
-                           .slice(0, 5);
-    
+        .sort((a, b) => new Date(b.date) - new Date(a.date))
+        .slice(0, 5);
+
     if (userOrders.length === 0) {
         recentActivityList.innerHTML = '<p>No recent activity</p>';
         return;
     }
-    
+
     recentActivityList.innerHTML = userOrders.map(order => `
         <div class="activity-item">
             <div class="activity-icon">
@@ -1063,14 +1063,14 @@ function loadRecentActivity() {
 function loadSidebarWishlist() {
     const sidebarWishlistItems = document.getElementById('sidebarWishlistItems');
     if (!sidebarWishlistItems) return;
-    
+
     if (wishlist.length === 0) {
         sidebarWishlistItems.innerHTML = '<div class="empty-state"><p>Your wishlist is empty</p></div>';
         return;
     }
-    
+
     const wishlistProducts = products.filter(product => wishlist.includes(product.id));
-    
+
     sidebarWishlistItems.innerHTML = wishlistProducts.map(product => `
         <div class="wishlist-item">
             <img src="${product.image}" alt="${product.name}">
@@ -1088,7 +1088,7 @@ function addToCartFromWishlist(productId) {
     const product = products.find(p => p.id === productId);
     if (product) {
         const existingItem = cart.find(item => item.id === productId);
-        
+
         if (existingItem) {
             existingItem.quantity++;
         } else {
@@ -1101,10 +1101,10 @@ function addToCartFromWishlist(productId) {
                 size: product.sizes ? product.sizes[0] : null
             });
         }
-        
+
         updateCartCount();
         showToast('Item added to cart!');
-        
+
         if (cartSidebar.classList.contains('active')) {
             renderCartItems();
         }
@@ -1128,13 +1128,13 @@ function checkout() { // This function is now replaced by enhancedCheckout
         return;
     }
 
-  // Close cart sidebar if open
-  cartSidebar.classList.remove('active');
-    
-  // Open address modal
-  addressModal.classList.add('active');
-  overlay.classList.add('active');
-  document.body.style.overflow = 'hidden';
+    // Close cart sidebar if open
+    cartSidebar.classList.remove('active');
+
+    // Open address modal
+    addressModal.classList.add('active');
+    overlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
 }
 
 function placeOrder() {
@@ -1295,7 +1295,7 @@ function loadPasswordResetSection() {
     newPasswordReset.addEventListener('input', () => {
         const password = newPasswordReset.value;
         let strength = 0;
-        
+
         // Check length
         if (password.length >= 8) {
             strength++;
@@ -1303,7 +1303,7 @@ function loadPasswordResetSection() {
         } else {
             reqLength.classList.remove('valid');
         }
-        
+
         // Check uppercase
         if (/[A-Z]/.test(password)) {
             strength++;
@@ -1311,7 +1311,7 @@ function loadPasswordResetSection() {
         } else {
             reqUppercase.classList.remove('valid');
         }
-        
+
         // Check lowercase
         if (/[a-z]/.test(password)) {
             strength++;
@@ -1319,7 +1319,7 @@ function loadPasswordResetSection() {
         } else {
             reqLowercase.classList.remove('valid');
         }
-        
+
         // Check number
         if (/\d/.test(password)) {
             strength++;
@@ -1327,7 +1327,7 @@ function loadPasswordResetSection() {
         } else {
             reqNumber.classList.remove('valid');
         }
-        
+
         // Check special character
         if (/[^A-Za-z0-9]/.test(password)) {
             strength++;
@@ -1335,7 +1335,7 @@ function loadPasswordResetSection() {
         } else {
             reqSpecial.classList.remove('valid');
         }
-        
+
         // Update strength meter
         passwordStrength.className = 'password-strength';
         if (password.length > 0) {
@@ -1372,8 +1372,8 @@ function loadPasswordResetSection() {
 
         // Check password strength
         const password = newPasswordReset.value;
-        if (password.length < 8 || !/[A-Z]/.test(password) || 
-            !/[a-z]/.test(password) || !/\d/.test(password) || 
+        if (password.length < 8 || !/[A-Z]/.test(password) ||
+            !/[a-z]/.test(password) || !/\d/.test(password) ||
             !/[^A-Za-z0-9]/.test(password)) {
             showToast('Password does not meet requirements');
             return;
@@ -1381,19 +1381,19 @@ function loadPasswordResetSection() {
 
         // Update password
         currentUser.password = newPasswordReset.value;
-        
+
         // Update in users array
         const userIndex = users.findIndex(u => u.id === currentUser.id);
         if (userIndex !== -1) {
             users[userIndex] = currentUser;
             saveUserData();
-            
+
             // Clear fields
             currentPasswordReset.value = '';
             newPasswordReset.value = '';
             confirmPasswordReset.value = '';
             passwordStrength.className = 'password-strength';
-            
+
             showToast('Password changed successfully');
         }
     });
@@ -1498,7 +1498,7 @@ function loadAccountSettingsData() {
             const userIndex = users.findIndex(u => u.id === currentUser.id);
             if (userIndex !== -1) {
                 users.splice(userIndex, 1); // Remove the user
-                
+
                 // Clear user data
                 currentUser = null;
                 cart = [];
@@ -1562,7 +1562,7 @@ function loadAddressValidation() {
 
     validateAddressBtn.addEventListener('click', () => {
         const address = addressToValidate.value.trim();
-        
+
         if (!address) {
             showToast('Please enter an address to validate');
             return;
@@ -1571,10 +1571,10 @@ function loadAddressValidation() {
         // For demo purposes, we'll simulate validation
         validationResult.style.display = 'block';
         validationResult.className = 'validation-result';
-        
+
         // In a real implementation, you would call an address validation API here
         const isValid = Math.random() > 0.3;
-        
+
         if (isValid) {
             validationResult.classList.add('success');
             resultContent.innerHTML = `
@@ -1585,7 +1585,7 @@ function loadAddressValidation() {
                     <button class="btn" id="saveValidatedAddress">Save Address</button>
                 </div>
             `;
-            
+
             document.getElementById('saveValidatedAddress')?.addEventListener('click', () => {
                 // Parse the address into components (in a real app, this would come from the validation API)
                 const addressComponents = {
@@ -1594,20 +1594,20 @@ function loadAddressValidation() {
                     state: 'Sample State',
                     zip: '123456'
                 };
-                
+
                 // Prompt user to complete the address
                 const name = prompt('Please enter your full name for this address:');
                 if (!name) return;
-                
+
                 const phone = prompt('Please enter your phone number:');
                 if (!phone) return;
-                
+
                 const addressData = {
                     name,
                     phone,
                     ...addressComponents
                 };
-                
+
                 if (saveUserAddress(addressData, 'shipping', false)) {
                     showToast('Address saved successfully');
                     validationResult.style.display = 'none';
@@ -1637,12 +1637,12 @@ function loadAddressValidation() {
 
     function renderSavedAddresses(addresses) {
         if (!savedAddressList) return;
-        
+
         if (addresses.length === 0) {
             savedAddressList.innerHTML = '<div class="empty-state"><p>No saved addresses</p></div>';
             return;
         }
-        
+
         savedAddressList.innerHTML = addresses.map(address => `
             <div class="address-item ${address.isDefault ? 'default' : ''}">
                 <div class="address-header">
@@ -1663,12 +1663,12 @@ function loadAddressValidation() {
 // Address management functions
 function selectAddressForCheckout(index) {
     if (!currentUser || !currentUser.addresses || index >= currentUser.addresses.length) return;
-    
+
     const selectedAddress = currentUser.addresses[index];
-    
+
     // Pre-fill shipping address fields in the checkout modal
     populateAddressForm(selectedAddress, 'shipping');
-    
+
     // If "same as shipping" is checked, also pre-fill billing
     if (sameAsShippingCheckbox.checked) {
         populateAddressForm(selectedAddress, 'billing');
@@ -1690,11 +1690,11 @@ function editAddress(index) {
     if (!currentUser || !currentUser.addresses || index >= currentUser.addresses.length) return;
 
     const addressToEdit = currentUser.addresses[index];
-    
+
     // Populate the address validation textarea with the address string
-    document.getElementById('addressToValidate').value = 
+    document.getElementById('addressToValidate').value =
         `${addressToEdit.address1}${addressToEdit.address2 ? ', ' + addressToEdit.address2 : ''}, ${addressToEdit.city}, ${addressToEdit.state} - ${addressToEdit.zip}, ${addressToEdit.country}`;
-    
+
     // Show the validation result section, ready for re-validation or saving
     document.getElementById('validationResult').style.display = 'block';
     document.getElementById('validationResult').className = 'validation-result'; // Reset classes
@@ -1710,7 +1710,7 @@ function editAddress(index) {
             showToast('Address cannot be empty.');
             return;
         }
-        
+
         // For simplicity, update only address1 and keep other fields as they were or infer
         const updatedAddress = {
             ...addressToEdit, // Keep existing details
@@ -1731,7 +1731,7 @@ function editAddress(index) {
 
 function removeAddress(index) {
     if (!currentUser || !currentUser.addresses || index >= currentUser.addresses.length) return;
-    
+
     if (confirm('Are you sure you want to remove this address?')) {
         currentUser.addresses.splice(index, 1);
         saveUserData();
@@ -1757,12 +1757,12 @@ window.editAddress = editAddress; // New global function
 window.removeAddress = removeAddress;
 
 // Initialize the application
-window.onload = function() {
+window.onload = function () {
     loadUserData();
     renderProducts(products);
     updateCartCount();
     updateWishlistCount();
-    
+
     // Initialize scroll animations
     initScrollAnimations();
 };
@@ -1773,7 +1773,7 @@ function initScrollAnimations() {
     document.querySelectorAll('.section-title').forEach(el => {
         el.classList.add('fade-in');
     });
-    
+
     document.querySelectorAll('.category-card').forEach((el, index) => {
         if (index % 2 === 0) {
             el.classList.add('slide-in-left');
@@ -1781,26 +1781,26 @@ function initScrollAnimations() {
             el.classList.add('slide-in-right');
         }
     });
-    
+
     document.querySelectorAll('.product-card').forEach(el => {
         el.classList.add('fade-in');
     });
-    
+
     // Check for elements in viewport on scroll
     function checkVisibility() {
         const elements = document.querySelectorAll('.fade-in, .slide-in-left, .slide-in-right');
         elements.forEach(element => {
             const position = element.getBoundingClientRect();
             // If element is in viewport
-            if(position.top < window.innerHeight && position.bottom >= 0) {
+            if (position.top < window.innerHeight && position.bottom >= 0) {
                 element.classList.add('visible');
             }
         });
     }
-    
+
     // Initial check
     checkVisibility();
-    
+
     // Check on scroll
     window.addEventListener('scroll', checkVisibility);
 }
@@ -1808,8 +1808,8 @@ function initScrollAnimations() {
 
 // Format currency
 function formatCurrency(amount) {
-    return new Intl.NumberFormat('en-IN', { 
-        style: 'currency', 
+    return new Intl.NumberFormat('en-IN', {
+        style: 'currency',
         currency: 'INR',
         maximumFractionDigits: 0
     }).format(amount);
@@ -1832,11 +1832,11 @@ function isValidEmail(email) {
 // Enhanced Product Filtering
 function enhancedFilterProducts(category, searchTerm = '') {
     let filteredProducts = products;
-    
+
     if (category !== 'all') {
         filteredProducts = filteredProducts.filter(product => product.category === category);
     }
-    
+
     if (searchTerm) {
         const term = searchTerm.toLowerCase();
         filteredProducts = filteredProducts.filter(product =>
@@ -1845,7 +1845,7 @@ function enhancedFilterProducts(category, searchTerm = '') {
             (product.description && product.description.toLowerCase().includes(term))
         );
     }
-    
+
     return filteredProducts;
 }
 
@@ -1896,28 +1896,28 @@ function showProductDetails(product) {
             </div>
         </div>
     `;
-    
+
     document.body.appendChild(modal);
     document.body.style.overflow = 'hidden';
-    
+
     // Add event listeners
     modal.querySelector('.close-modal').addEventListener('click', () => {
         document.body.removeChild(modal);
         document.body.style.overflow = '';
     });
-    
+
     modal.querySelector('.add-to-cart-modal').addEventListener('click', (e) => {
         const productId = parseInt(e.target.dataset.id);
         const size = modal.querySelector('.size-option.selected')?.dataset.size || null;
         addToCart({ target: { dataset: { id: productId }, closest: () => modal } }, size);
         showToast('Added to cart!');
     });
-    
+
     modal.querySelector('.wishlist-modal').addEventListener('click', (e) => {
         const productId = parseInt(e.target.closest('button').dataset.id);
         toggleWishlist({ target: e.target.closest('button') });
     });
-    
+
     // Size selection
     modal.querySelectorAll('.size-option').forEach(option => {
         option.addEventListener('click', () => {
@@ -1925,7 +1925,7 @@ function showProductDetails(product) {
             option.classList.add('selected');
         });
     });
-    
+
     // Close when clicking outside
     modal.addEventListener('click', (e) => {
         if (e.target === modal) {
@@ -1942,7 +1942,7 @@ function enhancedHandleSearch() {
     searchTimeout = setTimeout(() => {
         const searchTerm = searchInput.value.trim().toLowerCase();
         const activeFilter = document.querySelector('.filter-btn.active')?.dataset.filter || 'all';
-        
+
         if (searchTerm.length >= 2 || searchTerm.length === 0) {
             const filteredProducts = enhancedFilterProducts(activeFilter, searchTerm);
             renderProducts(filteredProducts);
@@ -1957,7 +1957,7 @@ searchInput.addEventListener('input', enhancedHandleSearch);
 function trackOrder(orderId) {
     const order = orders.find(o => o.id === orderId);
     if (!order) return null;
-    
+
     const statusStages = [
         { status: 'Processing', description: 'Order received', time: order.date },
         { status: 'Confirmed', description: 'Payment confirmed', time: addTime(order.date, 1) },
@@ -1965,15 +1965,15 @@ function trackOrder(orderId) {
         { status: 'Out for Delivery', description: 'With delivery agent', time: addTime(order.date, 3) },
         { status: 'Delivered', description: 'Order delivered', time: addTime(order.date, 4) }
     ];
-    
+
     // Simulate current status based on order date
     const now = new Date();
     const orderDate = new Date(order.date);
     const hoursSinceOrder = (now - orderDate) / (1000 * 60 * 60);
-    
+
     let currentStage = Math.floor(hoursSinceOrder / 24);
     if (currentStage >= statusStages.length) currentStage = statusStages.length - 1;
-    
+
     return {
         currentStatus: statusStages[currentStage].status,
         stages: statusStages,
@@ -1994,7 +1994,7 @@ function showOrderTracking(orderId) {
         showToast('Order not found');
         return;
     }
-    
+
     const modal = document.createElement('div');
     modal.className = 'tracking-modal';
     modal.innerHTML = `
@@ -2024,16 +2024,16 @@ function showOrderTracking(orderId) {
             </div>
         </div>
     `;
-    
+
     document.body.appendChild(modal);
     document.body.style.overflow = 'hidden';
-    
+
     // Add event listeners
     modal.querySelector('.close-modal').addEventListener('click', () => {
         document.body.removeChild(modal);
         document.body.style.overflow = '';
     });
-    
+
     // Close when clicking outside
     modal.addEventListener('click', (e) => {
         if (e.target === modal) {
@@ -2065,7 +2065,7 @@ function enhancedCheckout() {
 
 function renderAddressSelection() {
     const savedAddresses = currentUser.addresses || [];
-    
+
     savedAddressesContainer.innerHTML = ''; // Clear previous content
     addressFormContainer.style.display = 'none'; // Hide form by default
 
@@ -2090,7 +2090,7 @@ function renderAddressSelection() {
             `;
             savedAddressesContainer.appendChild(addressElement);
         });
-        
+
         // Add "Add New Address" button below saved addresses
         const addNewBtn = document.createElement('button');
         addNewBtn.className = 'btn btn-outline';
@@ -2119,7 +2119,7 @@ function renderAddressSelection() {
             }
         });
     });
-    
+
     document.querySelectorAll('.set-default-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
             const addressId = parseInt(e.target.dataset.id);
@@ -2129,7 +2129,7 @@ function renderAddressSelection() {
             }
         });
     });
-    
+
     document.querySelectorAll('.delete-address-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
             const addressId = parseInt(e.target.dataset.id);
@@ -2147,7 +2147,7 @@ function renderAddressSelection() {
 function showAddressFormForNewEntry() {
     savedAddressesContainer.style.display = 'none';
     addressFormContainer.style.display = 'block';
-    
+
     // Clear and pre-fill form with current user info if available
     populateAddressForm({
         name: currentUser.name || '',
@@ -2160,12 +2160,12 @@ function showAddressFormForNewEntry() {
         zip: '',
         country: 'India'
     }, 'shipping');
-    
+
     // Reset billing section and checkbox
     sameAsShippingCheckbox.checked = true;
     billingSection.style.display = 'none';
     populateAddressForm({}, 'billing'); // Clear billing form
-    
+
     // Ensure "Save this address" is checked by default for new entries
     if (saveAsDefaultCheckbox) {
         saveAsDefaultCheckbox.checked = true;
@@ -2176,7 +2176,7 @@ function showAddressFormForNewEntry() {
 function proceedToPayment() {
     addressModal.classList.remove('active');
     paymentModal.classList.add('active');
-    
+
     // Pre-fill payment method if previously used (not implemented in this snippet)
     // if (currentUser.preferredPaymentMethod) {
     //     document.querySelector(`input[name="paymentMethod"][value="${currentUser.preferredPaymentMethod}"]`).checked = true;
@@ -2202,7 +2202,7 @@ function handleAddressValidationAndProceed() {
         }
         return;
     }
-    
+
     if (!sameAsShippingCheckbox.checked) {
         billingAddress = getAddressFromForm('billing');
         const billingValidation = validateAddress(billingAddress, 'billing');
@@ -2219,7 +2219,7 @@ function handleAddressValidationAndProceed() {
     } else {
         billingAddress = shippingAddress;
     }
-    
+
     // Save addresses to user profile if "Save this address" is checked
     const saveAsDefault = saveAsDefaultCheckbox ? saveAsDefaultCheckbox.checked : false;
     if (saveAsDefault) {
@@ -2228,12 +2228,12 @@ function handleAddressValidationAndProceed() {
             saveUserAddress(billingAddress, 'billing', false); // Don't set billing as default if different
         }
     }
-    
+
     // Set current addresses for this order (regardless of saving to profile)
     currentUser.shipping = shippingAddress;
     currentUser.billing = billingAddress;
     saveUserData();
-    
+
     // Proceed to payment
     proceedToPayment();
 }
@@ -2298,11 +2298,11 @@ function loadSidebarOrderHistory() {
 function submitProductReview(productId, rating, comment) {
     const product = products.find(p => p.id === productId);
     if (!product) return false;
-    
+
     if (!product.reviewsData) {
         product.reviewsData = [];
     }
-    
+
     const review = {
         id: generateId(),
         userId: currentUser?.id || null,
@@ -2311,14 +2311,14 @@ function submitProductReview(productId, rating, comment) {
         comment,
         date: new Date().toISOString()
     };
-    
+
     product.reviewsData.push(review);
-    
+
     // Update average rating
     const totalRatings = product.reviewsData.reduce((sum, r) => sum + r.rating, 0);
     product.rating = parseFloat((totalRatings / product.reviewsData.length).toFixed(1));
     product.reviews = product.reviewsData.length;
-    
+
     return true;
 }
 
@@ -2329,10 +2329,10 @@ function showReviewModal(productId) {
         toggleAuthModal();
         return;
     }
-    
+
     const product = products.find(p => p.id === productId);
     if (!product) return;
-    
+
     const modal = document.createElement('div');
     modal.className = 'review-modal';
     modal.innerHTML = `
@@ -2353,19 +2353,19 @@ function showReviewModal(productId) {
             <button class="btn submit-review">Submit Review</button>
         </div>
     `;
-    
+
     document.body.appendChild(modal);
     document.body.style.overflow = 'hidden';
-    
+
     let selectedRating = 0;
     const stars = modal.querySelectorAll('.rating-stars i');
     const ratingText = modal.querySelector('.rating-text');
-    
+
     stars.forEach(star => {
         star.addEventListener('click', () => {
             const rating = parseInt(star.dataset.rating);
             selectedRating = rating;
-            
+
             stars.forEach((s, i) => {
                 if (i < rating) {
                     s.classList.remove('far');
@@ -2375,7 +2375,7 @@ function showReviewModal(productId) {
                     s.classList.add('far');
                 }
             });
-            
+
             const ratingTexts = [
                 'Poor',
                 'Fair',
@@ -2383,13 +2383,13 @@ function showReviewModal(productId) {
                 'Very Good',
                 'Excellent'
             ];
-            
+
             ratingText.textContent = ratingTexts[rating - 1];
         });
-        
+
         star.addEventListener('mouseover', () => {
             const rating = parseInt(star.dataset.rating);
-            
+
             stars.forEach((s, i) => {
                 if (i < rating) {
                     s.classList.add('hover');
@@ -2398,25 +2398,25 @@ function showReviewModal(productId) {
                 }
             });
         });
-        
+
         star.addEventListener('mouseout', () => {
             stars.forEach(s => s.classList.remove('hover'));
         });
     });
-    
+
     modal.querySelector('.submit-review').addEventListener('click', () => {
         const comment = modal.querySelector('textarea').value.trim();
-        
+
         if (selectedRating === 0) {
             showToast('Please select a rating');
             return;
         }
-        
+
         if (submitProductReview(productId, selectedRating, comment)) {
             showToast('Thank you for your review!');
             document.body.removeChild(modal);
             document.body.style.overflow = '';
-            
+
             // Refresh product display if needed
             const activeFilter = document.querySelector('.filter-btn.active')?.dataset.filter || 'all';
             const filteredProducts = enhancedFilterProducts(activeFilter, searchInput.value.trim());
@@ -2425,12 +2425,12 @@ function showReviewModal(productId) {
             showToast('Failed to submit review');
         }
     });
-    
+
     modal.querySelector('.close-modal').addEventListener('click', () => {
         document.body.removeChild(modal);
         document.body.style.overflow = '';
     });
-    
+
     modal.addEventListener('click', (e) => {
         if (e.target === modal) {
             document.body.removeChild(modal);
@@ -2454,7 +2454,7 @@ function initializeAll() {
     renderProducts(products);
     updateCartCount();
     updateWishlistCount();
-    
+
     // Add any additional initialization needed
     if (currentUser) {
         updateSidebarUserInfo();
@@ -2467,15 +2467,15 @@ document.addEventListener('DOMContentLoaded', initializeAll);
 function showServicePage(pageId) {
     document.getElementById('main-content').style.display = 'none';
     document.getElementById('service-pages').style.display = 'block';
-    
+
     // Hide all service pages
     document.querySelectorAll('.service-page').forEach(page => {
         page.style.display = 'none';
     });
-    
+
     // Show the requested page
     document.getElementById(pageId).style.display = 'block';
-    
+
     // Scroll to top
     window.scrollTo(0, 0);
 }
@@ -2486,15 +2486,26 @@ function showMainContent() {
     window.scrollTo(0, 0);
 }
 
+// Handle service-link clicks
+document.addEventListener('click', (e) => {
+    if (e.target.classList.contains('service-link') || e.target.closest('.service-link')) {
+        e.preventDefault();
+        const link = e.target.classList.contains('service-link') ? e.target : e.target.closest('.service-link');
+        const href = link.getAttribute('href');
+        const pageId = href.substring(1); // remove #
+        showServicePage(pageId);
+    }
+});
+
 // FAQ accordion functionality
 document.addEventListener('click', (e) => {
-    if (e.target.classList.contains('faq-question') || 
+    if (e.target.classList.contains('faq-question') ||
         e.target.parentElement.classList.contains('faq-question')) {
-        const question = e.target.classList.contains('faq-question') 
-            ? e.target 
+        const question = e.target.classList.contains('faq-question')
+            ? e.target
             : e.target.parentElement;
         const answer = question.nextElementSibling;
-        
+
         question.classList.toggle('active');
         answer.classList.toggle('active');
     }
@@ -2519,49 +2530,49 @@ function isValidZip(zip) {
 function validateAddress(address, prefix = '') {
     const missingFields = [];
     let invalidField = null;
-    
+
     // Check required fields
     if (!address.name || address.name.trim() === '') {
         missingFields.push('name');
     }
-    
+
     if (!address.email || address.email.trim() === '') {
         missingFields.push('email');
     } else if (!isValidEmail(address.email)) {
         invalidField = 'email';
     }
-    
+
     if (!address.phone || address.phone.trim() === '') {
         missingFields.push('phone');
     } else if (!isValidPhone(address.phone)) {
         invalidField = 'phone';
     }
-    
+
     if (!address.address1 || address.address1.trim() === '') {
         missingFields.push('address1');
     }
-    
+
     if (!address.city || address.city.trim() === '') {
         missingFields.push('city');
     }
-    
+
     if (!address.state || address.state.trim() === '') {
         missingFields.push('state');
     }
-    
+
     if (!address.zip || address.zip.trim() === '') {
         missingFields.push('zip');
     } else if (!isValidZip(address.zip)) {
         invalidField = 'zip';
     }
-    
+
     if (!address.country || address.country.trim() === '') {
         missingFields.push('country');
     }
-    
+
     const isValid = missingFields.length === 0 && !invalidField;
     let message = '';
-    
+
     if (missingFields.length > 0) {
         message = `Please fill in all required ${prefix} address fields: ${missingFields.join(', ')}`;
     } else if (invalidField) {
@@ -2579,7 +2590,7 @@ function validateAddress(address, prefix = '') {
                 message = `Please check the ${prefix} ${invalidField} field`;
         }
     }
-    
+
     return {
         isValid,
         message,
@@ -2602,14 +2613,14 @@ function markInvalidField(fieldElement, isValid) {
 // Save address to user profile
 function saveUserAddress(addressData, type = 'shipping', setAsDefault = false) {
     if (!currentUser) return false;
-    
+
     // Initialize addresses array if it doesn't exist
     if (!currentUser.addresses) {
         currentUser.addresses = [];
     }
-    
+
     // Check if an identical address already exists to prevent duplicates
-    const isDuplicate = currentUser.addresses.some(existingAddr => 
+    const isDuplicate = currentUser.addresses.some(existingAddr =>
         existingAddr.name === addressData.name &&
         existingAddr.phone === addressData.phone &&
         existingAddr.address1 === addressData.address1 &&
@@ -2632,7 +2643,7 @@ function saveUserAddress(addressData, type = 'shipping', setAsDefault = false) {
         isDefault: setAsDefault,
         createdAt: new Date().toISOString()
     };
-    
+
     // If setting as default, remove default flag from other addresses of the same type
     if (setAsDefault) {
         currentUser.addresses.forEach(addr => {
@@ -2641,15 +2652,15 @@ function saveUserAddress(addressData, type = 'shipping', setAsDefault = false) {
             }
         });
     }
-    
+
     // Add the new address
     currentUser.addresses.push(address);
-    
+
     // Also set as current shipping/billing address if it's the default
     if (setAsDefault) {
         currentUser[type] = address;
     }
-    
+
     saveUserData();
     return true;
 }
@@ -2657,34 +2668,34 @@ function saveUserAddress(addressData, type = 'shipping', setAsDefault = false) {
 // Get user addresses
 function getUserAddresses(type = null) {
     if (!currentUser || !currentUser.addresses) return [];
-    
+
     if (type) {
         return currentUser.addresses.filter(addr => addr.type === type);
     }
-    
+
     return currentUser.addresses;
 }
 
 // Set default address
 function setDefaultAddress(addressId) {
     if (!currentUser || !currentUser.addresses) return false;
-    
+
     const addressToSetDefault = currentUser.addresses.find(addr => addr.id === addressId);
     if (!addressToSetDefault) return false;
-    
+
     // Remove default flag from all addresses of the same type
     currentUser.addresses.forEach(addr => {
         if (addr.type === addressToSetDefault.type) {
             addr.isDefault = false;
         }
     });
-    
+
     // Set this address as default
     addressToSetDefault.isDefault = true;
-    
+
     // Also update current shipping/billing reference
     currentUser[addressToSetDefault.type] = addressToSetDefault;
-    
+
     saveUserData();
     return true;
 }
@@ -2692,21 +2703,21 @@ function setDefaultAddress(addressId) {
 // Delete address
 function deleteAddress(addressId) {
     if (!currentUser || !currentUser.addresses) return false;
-    
+
     const index = currentUser.addresses.findIndex(addr => addr.id === addressId);
     if (index === -1) return false;
-    
+
     const deletedAddress = currentUser.addresses[index];
-    
+
     // Remove the address
     currentUser.addresses.splice(index, 1);
-    
+
     // If it was the default, set a new default if available
     if (deletedAddress.isDefault) {
         const remainingAddressesOfType = currentUser.addresses.filter(
             addr => addr.type === deletedAddress.type
         );
-        
+
         if (remainingAddressesOfType.length > 0) {
             remainingAddressesOfType[0].isDefault = true;
             currentUser[remainingAddressesOfType[0].type] = remainingAddressesOfType[0];
@@ -2715,7 +2726,7 @@ function deleteAddress(addressId) {
             currentUser[deletedAddress.type] = null;
         }
     }
-    
+
     saveUserData();
     return true;
 }
@@ -2799,7 +2810,7 @@ function initializeChatbot() {
         if (message) {
             addMessage(message, 'user');
             chatInput.value = '';
-            
+
             // Simulate bot response
             setTimeout(() => {
                 const response = getBotResponse(message);
@@ -2811,7 +2822,7 @@ function initializeChatbot() {
     if (sendMessage) {
         sendMessage.addEventListener('click', sendChatMessage);
     }
-    
+
     if (chatInput) {
         chatInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
@@ -2824,7 +2835,7 @@ function initializeChatbot() {
     function addMessage(message, sender) {
         const messageDiv = document.createElement('div');
         messageDiv.className = `chat-message ${sender}`;
-        
+
         if (sender === 'bot') {
             messageDiv.innerHTML = `
                 <div class="message-avatar">
@@ -2840,7 +2851,7 @@ function initializeChatbot() {
                 </div>
             `;
         }
-        
+
         chatMessages.appendChild(messageDiv);
         chatMessages.scrollTop = chatMessages.scrollHeight;
     }
@@ -2882,14 +2893,14 @@ function initializeChatbot() {
     }
 
     // Handle option clicks
-    window.handleOptionClick = function(option) {
+    window.handleOptionClick = function (option) {
         // Add user message showing what they selected
         addMessage(`Tell me about ${option}`, 'user');
-        
+
         // Get appropriate response
         setTimeout(() => {
             let response = '';
-            switch(option) {
+            switch (option) {
                 case 'products':
                     response = "We have a wide range of products including:<br>• Electronics & Gadgets<br>• Fashion & Clothing<br>• Home & Garden<br>• Sports & Fitness<br>• Beauty & Personal Care<br><br>You can browse our categories or use the search function to find specific items!";
                     break;
@@ -2918,50 +2929,50 @@ function initializeChatbot() {
     // Bot responses
     function getBotResponse(message) {
         const lowerMessage = message.toLowerCase();
-        
+
         if (lowerMessage.includes('hello') || lowerMessage.includes('hi') || lowerMessage.includes('hey')) {
             setTimeout(() => {
                 addOptionsMessage();
             }, 500);
             return "Hello! Welcome to Mighty Mahal! 👋 How can I help you today?";
         }
-        
+
         if (lowerMessage.includes('product') || lowerMessage.includes('item')) {
             return "We have a wide range of products including electronics, fashion, home & garden, and more! You can browse our categories or use the search function to find specific items.";
         }
-        
+
         if (lowerMessage.includes('shipping') || lowerMessage.includes('delivery')) {
             return "We offer fast and reliable shipping! Standard delivery takes 3-5 business days, and express delivery is available for 1-2 days. Free shipping on orders over ₹500!";
         }
-        
+
         if (lowerMessage.includes('return') || lowerMessage.includes('exchange')) {
             return "We have a hassle-free 30-day return policy! Items must be in original condition. You can initiate returns through your account or contact our support team.";
         }
-        
+
         if (lowerMessage.includes('contact') || lowerMessage.includes('support')) {
             return "You can reach us at:<br>📞 +91 9876543210<br>📧 support@mightymahal.com<br>🏪 Visit our store in Gomti Nagar, Lucknow<br>Our support team is available Mon-Fri, 9 AM - 8 PM.";
         }
-        
+
         if (lowerMessage.includes('payment') || lowerMessage.includes('pay')) {
             return "We accept all major payment methods including credit/debit cards, UPI, net banking, and cash on delivery. All transactions are secure and encrypted.";
         }
-        
+
         if (lowerMessage.includes('account') || lowerMessage.includes('profile')) {
             return "You can create an account to track orders, save favorites, and get personalized recommendations. Click on the profile icon in the top right to get started!";
         }
-        
+
         if (lowerMessage.includes('deal') || lowerMessage.includes('offer') || lowerMessage.includes('discount')) {
             return "Check out our amazing deals section for the latest offers! We regularly update with flash sales, seasonal discounts, and exclusive member deals.";
         }
-        
+
         if (lowerMessage.includes('thank')) {
             return "You're welcome! Is there anything else I can help you with? 😊";
         }
-        
+
         if (lowerMessage.includes('bye') || lowerMessage.includes('goodbye')) {
             return "Goodbye! Thanks for visiting Mighty Mahal. Have a great day! 👋";
         }
-        
+
         // Default response
         return "I'm here to help! You can ask me about our products, shipping, returns, payments, or any other questions about Mighty Mahal. What would you like to know?";
     }
@@ -2994,3 +3005,24 @@ document.addEventListener("DOMContentLoaded", () => {
         observer.observe(authModal, { attributes: true, attributeFilter: ["style"] });
     }
 });
+
+// Allowed categories: Only Men's and Women's Wear (hide footwear & accessories)
+function getFilteredProducts() {
+    const allowed = ["Men's", "Women's"];
+    const blocked = /(Shoes|Heels|Sneakers|Handbag|Wallet|Belt|Sunglasses|Jewelry|Scarf|Watch)/i;
+
+    return products.filter(p =>
+        allowed.some(k => p.name.startsWith(k)) && !blocked.test(p.name)
+    );
+}
+
+// Use this instead of products when rendering
+renderProducts(getFilteredProducts());
+
+// Category filter function
+function filterByCategory(type) {
+    let filtered = getFilteredProducts().filter(p =>
+        type === 'men' ? p.name.startsWith("Men's") : p.name.startsWith("Women's")
+    );
+    renderProducts(filtered);
+}
