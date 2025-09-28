@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mighty Mahal | Premium E-Commerce Store</title>
+    <title>Mighty Mahal | Premium E-Commerce Private Limited</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <link rel="stylesheet" href="styles.css">
@@ -21,7 +21,7 @@
             <nav>
                 <ul>
                     <li><a href="#" class="active">Home</a></li>
-                    
+
                     <li><a href="#products">Products</a></li>
                     <li><a href="#categories">Categories</a></li>
                     <li><a href="#deals">Deals</a></li>
@@ -96,7 +96,7 @@
                     <label for="registerPhone">Phone</label>
                     <input type="tel" id="registerPhone" required>
                 </div>
-                
+
                 <div class="form-actions" style="gap:10px; display:flex; flex-wrap:wrap;">
                     <button type="button" class="btn btn-outline" id="sendOtpBtn">Send OTP</button>
                     <div id="otpSection" style="display:none; width:100%;">
@@ -116,82 +116,124 @@
     </div>
 
     <!-- Payment Modal -->
-    
 
-<!-- Address Validation Modal -->
-<div class="payment-modal" id="addressModal">
-    <div class="payment-header">
-        <h2>Checkout - Address Details</h2>
-        <button class="close-modal" id="closeAddressModal"><i class="fas fa-times"></i></button>
-    </div>
-    <div class="payment-content" style="max-height:80vh; overflow-y:auto;">
 
-        <!-- Container for Saved Addresses -->
-        <div id="savedAddressesContainer" style="display: none;">
-            <h3>Your Saved Addresses</h3>
-            <!-- Saved addresses will be dynamically loaded here -->
-            <button class="btn btn-outline" id="addNewAddressFormBtn" style="width:100%; margin-top:15px;">Add New Address</button>
+    <!-- Address Validation Modal -->
+    <div class="payment-modal" id="addressModal">
+        <div class="payment-header">
+            <h2>Checkout - Address Details</h2>
+            <button class="close-modal" id="closeAddressModal"><i class="fas fa-times"></i></button>
         </div>
+        <div class="payment-content" style="max-height:80vh; overflow-y:auto;">
 
-        <!-- Address Form Container -->
-        <div id="addressFormContainer">
-            <!-- Shipping Address -->
-            <h3>Shipping Address</h3>
-            <div class="form-group"><label>Full Name</label><input type="text" id="shippingName" placeholder="Receiver's full name"></div>
-            <div class="form-group"><label>Email</label><input type="email" id="shippingEmail" placeholder="Receiver's email"></div>
-            <div class="form-group"><label>Phone</label><input type="tel" id="shippingPhone" placeholder="Receiver's phone number"></div>
-            <div class="form-group"><label>Address Line 1</label><input type="text" id="shippingAddress1" placeholder="Street address, P.O. box, company name, etc."></div>
-            <div class="form-group"><label>Address Line 2</label><input type="text" id="shippingAddress2" placeholder="Apartment, suite, unit, etc."></div>
-            <div class="form-group"><label>City</label><input type="text" id="shippingCity" placeholder="City"></div>
-            <div class="form-group"><label>State</label>
-                <select id="shippingState">
-                    <option value="">Select State</option>
-                    <option>Andhra Pradesh</option><option>Arunachal Pradesh</option><option>Assam</option><option>Bihar</option>
-                    <option>Chhattisgarh</option><option>Goa</option><option>Gujarat</option><option>Haryana</option><option>Himachal Pradesh</option>
-                    <option>Jharkhand</option><option>Karnataka</option><option>Kerala</option><option>Madhya Pradesh</option><option>Maharashtra</option>
-                    <option>Manipur</option><option>Meghalaya</option><option>Mizoram</option><option>Nagaland</option><option>Odisha</option>
-                    <option>Punjab</option><option>Rajasthan</option><option>Sikkim</option><option>Tamil Nadu</option><option>Telangana</option>
-                    <option>Tripura</option><option>Uttar Pradesh</option><option>Uttarakhand</option><option>West Bengal</option><option>Delhi</option>
-                    <option>Jammu & Kashmir</option><option>Ladakh</option>
-                </select>
-            </div>
-            <div class="form-group"><label>Postal Code</label><input type="text" id="shippingZip" placeholder="PIN Code"></div>
-            <div class="form-group"><label>Country</label><input type="text" id="shippingCountry" value="India" readonly></div>
-
-            <!-- Checkbox for billing -->
-            <div class="form-group">
-                <input type="checkbox" id="sameAsShipping" checked>
-                <label for="sameAsShipping">Billing address same as shipping</label>
+            <!-- Container for Saved Addresses -->
+            <div id="savedAddressesContainer" style="display: none;">
+                <h3>Your Saved Addresses</h3>
+                <!-- Saved addresses will be dynamically loaded here -->
+                <button class="btn btn-outline" id="addNewAddressFormBtn" style="width:100%; margin-top:15px;">Add New
+                    Address</button>
             </div>
 
-            <!-- Billing Address -->
-            <div id="billingSection">
-                <h3>Billing Address</h3>
-                <div class="form-group"><label>Full Name</label><input type="text" id="billingName" placeholder="Sender's full name"></div>
-                <div class="form-group"><label>Email</label><input type="email" id="billingEmail" placeholder="Sender's email"></div>
-                <div class="form-group"><label>Phone</label><input type="tel" id="billingPhone" placeholder="Sender's phone number"></div>
-                <div class="form-group"><label>Address Line 1</label><input type="text" id="billingAddress1" placeholder="Street address"></div>
-                <div class="form-group"><label>Address Line 2</label><input type="text" id="billingAddress2" placeholder="Apartment, suite, etc."></div>
-                <div class="form-group"><label>City</label><input type="text" id="billingCity" placeholder="City"></div>
+            <!-- Address Form Container -->
+            <div id="addressFormContainer">
+                <!-- Shipping Address -->
+                <h3>Shipping Address</h3>
+                <div class="form-group"><label>Full Name</label><input type="text" id="shippingName"
+                        placeholder="Receiver's full name"></div>
+                <div class="form-group"><label>Email</label><input type="email" id="shippingEmail"
+                        placeholder="Receiver's email"></div>
+                <div class="form-group"><label>Phone</label><input type="tel" id="shippingPhone"
+                        placeholder="Receiver's phone number"></div>
+                <div class="form-group"><label>Address Line 1</label><input type="text" id="shippingAddress1"
+                        placeholder="Street address, P.O. box, company name, etc."></div>
+                <div class="form-group"><label>Address Line 2</label><input type="text" id="shippingAddress2"
+                        placeholder="Apartment, suite, unit, etc."></div>
+                <div class="form-group"><label>City</label><input type="text" id="shippingCity" placeholder="City">
+                </div>
                 <div class="form-group"><label>State</label>
-                    <select id="billingState">
+                    <select id="shippingState">
                         <option value="">Select State</option>
+                        <option>Andhra Pradesh</option>
+                        <option>Arunachal Pradesh</option>
+                        <option>Assam</option>
+                        <option>Bihar</option>
+                        <option>Chhattisgarh</option>
+                        <option>Goa</option>
+                        <option>Gujarat</option>
+                        <option>Haryana</option>
+                        <option>Himachal Pradesh</option>
+                        <option>Jharkhand</option>
+                        <option>Karnataka</option>
+                        <option>Kerala</option>
+                        <option>Madhya Pradesh</option>
+                        <option>Maharashtra</option>
+                        <option>Manipur</option>
+                        <option>Meghalaya</option>
+                        <option>Mizoram</option>
+                        <option>Nagaland</option>
+                        <option>Odisha</option>
+                        <option>Punjab</option>
+                        <option>Rajasthan</option>
+                        <option>Sikkim</option>
+                        <option>Tamil Nadu</option>
+                        <option>Telangana</option>
+                        <option>Tripura</option>
+                        <option>Uttar Pradesh</option>
+                        <option>Uttarakhand</option>
+                        <option>West Bengal</option>
+                        <option>Delhi</option>
+                        <option>Jammu & Kashmir</option>
+                        <option>Ladakh</option>
                     </select>
                 </div>
-                <div class="form-group"><label>Postal Code</label><input type="text" id="billingZip" placeholder="PIN Code"></div>
-                <div class="form-group"><label>Country</label><input type="text" id="billingCountry" value="India" readonly></div>
-            </div>
+                <div class="form-group"><label>Postal Code</label><input type="text" id="shippingZip"
+                        placeholder="PIN Code"></div>
+                <div class="form-group"><label>Country</label><input type="text" id="shippingCountry" value="India"
+                        readonly></div>
 
-            <!-- Save as default checkbox -->
-            <div class="save-default-container form-group">
-                <input type="checkbox" id="saveAsDefault" checked>
-                <label for="saveAsDefault">Save this address for future use</label>
-            </div>
+                <!-- Checkbox for billing -->
+                <div class="form-group">
+                    <input type="checkbox" id="sameAsShipping" checked>
+                    <label for="sameAsShipping">Billing address same as shipping</label>
+                </div>
 
-            <button class="btn" id="validateAddressContinueBtn" style="width:100%; margin-top:20px;">Continue to Payment</button>
+                <!-- Billing Address -->
+                <div id="billingSection">
+                    <h3>Billing Address</h3>
+                    <div class="form-group"><label>Full Name</label><input type="text" id="billingName"
+                            placeholder="Sender's full name"></div>
+                    <div class="form-group"><label>Email</label><input type="email" id="billingEmail"
+                            placeholder="Sender's email"></div>
+                    <div class="form-group"><label>Phone</label><input type="tel" id="billingPhone"
+                            placeholder="Sender's phone number"></div>
+                    <div class="form-group"><label>Address Line 1</label><input type="text" id="billingAddress1"
+                            placeholder="Street address"></div>
+                    <div class="form-group"><label>Address Line 2</label><input type="text" id="billingAddress2"
+                            placeholder="Apartment, suite, etc."></div>
+                    <div class="form-group"><label>City</label><input type="text" id="billingCity" placeholder="City">
+                    </div>
+                    <div class="form-group"><label>State</label>
+                        <select id="billingState">
+                            <option value="">Select State</option>
+                        </select>
+                    </div>
+                    <div class="form-group"><label>Postal Code</label><input type="text" id="billingZip"
+                            placeholder="PIN Code"></div>
+                    <div class="form-group"><label>Country</label><input type="text" id="billingCountry" value="India"
+                            readonly></div>
+                </div>
+
+                <!-- Save as default checkbox -->
+                <div class="save-default-container form-group">
+                    <input type="checkbox" id="saveAsDefault" checked>
+                    <label for="saveAsDefault">Save this address for future use</label>
+                </div>
+
+                <button class="btn" id="validateAddressContinueBtn" style="width:100%; margin-top:20px;">Continue to
+                    Payment</button>
+            </div>
         </div>
     </div>
-</div>
 
     <div class="payment-modal" id="paymentModal">
         <div class="payment-header">
@@ -214,23 +256,23 @@
         </div>
     </div>
     <!-- Order Confirmation Modal -->
-<div class="confirmation-modal" id="confirmationModal">
-    <div class="confirmation-header">
-        <h2>Order Placed Successfully!</h2>
-        <button class="close-modal" id="closeConfirmationModal"><i class="fas fa-times"></i></button>
-    </div>
-    <div class="confirmation-content">
-        <div class="confirmation-icon">
-            <i class="fas fa-check-circle"></i>
+    <div class="confirmation-modal" id="confirmationModal">
+        <div class="confirmation-header">
+            <h2>Order Placed Successfully!</h2>
+            <button class="close-modal" id="closeConfirmationModal"><i class="fas fa-times"></i></button>
         </div>
-        <h3>Thank you for your order!</h3>
-        <p>Your order <span id="orderIdPlaceholder"></span> has been placed successfully.</p>
-        <div class="confirmation-actions">
-            <button class="btn" id="downloadInvoiceBtn">Download Invoice</button>
-            <button class="btn btn-outline" id="continueShoppingBtn">Continue Shopping</button>
+        <div class="confirmation-content">
+            <div class="confirmation-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h3>Thank you for your order!</h3>
+            <p>Your order <span id="orderIdPlaceholder"></span> has been placed successfully.</p>
+            <div class="confirmation-actions">
+                <button class="btn" id="downloadInvoiceBtn">Download Invoice</button>
+                <button class="btn btn-outline" id="continueShoppingBtn">Continue Shopping</button>
+            </div>
         </div>
     </div>
-</div>
 
     <!-- Cart Sidebar -->
     <div class="cart-sidebar" id="cartSidebar">
@@ -350,16 +392,19 @@
                 <div class="password-reset-form">
                     <div class="form-group">
                         <label>Current Password</label>
-                        <input type="password" id="currentPasswordReset" class="form-control" placeholder="Enter current password">
+                        <input type="password" id="currentPasswordReset" class="form-control"
+                            placeholder="Enter current password">
                     </div>
                     <div class="form-group">
                         <label>New Password</label>
-                        <input type="password" id="newPasswordReset" class="form-control" placeholder="Enter new password">
+                        <input type="password" id="newPasswordReset" class="form-control"
+                            placeholder="Enter new password">
                         <div class="password-strength" id="passwordStrength"></div>
                     </div>
                     <div class="form-group">
                         <label>Confirm New Password</label>
-                        <input type="password" id="confirmPasswordReset" class="form-control" placeholder="Confirm new password">
+                        <input type="password" id="confirmPasswordReset" class="form-control"
+                            placeholder="Confirm new password">
                     </div>
                     <div class="password-requirements">
                         <h4>Password Requirements:</h4>
@@ -384,7 +429,7 @@
                     <div class="settings-tab" data-tab="privacy">Privacy</div>
                     <div class="settings-tab" data-tab="security">Security</div>
                 </div>
-                
+
                 <div class="settings-content">
                     <!-- Personal Info Tab -->
                     <div class="settings-tab-content active" id="personalTab">
@@ -566,10 +611,11 @@
                 <div class="address-validation-form">
                     <div class="form-group">
                         <label>Enter Address to Validate</label>
-                        <textarea id="addressToValidate" class="form-control" rows="3" placeholder="Enter complete address..."></textarea>
+                        <textarea id="addressToValidate" class="form-control" rows="3"
+                            placeholder="Enter complete address..."></textarea>
                     </div>
                     <button class="btn" id="validateAddressBtn">Validate Address</button>
-                    
+
                     <div class="validation-result" id="validationResult" style="display: none;">
                         <h4>Validation Result</h4>
                         <div class="result-content" id="resultContent">
@@ -577,7 +623,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="saved-addresses">
                     <h3>Saved Addresses</h3>
                     <div id="savedAddressList">
@@ -634,7 +680,8 @@
         <div class="container">
             <div class="hero-content">
                 <h2 class="gradient-text">Premium Shopping Experience</h2>
-                <p>Discover over 100+ premium clothing products with express delivery and exceptional customer service</p>
+                <p>Discover over 100+ premium clothing products with express delivery and exceptional customer service
+                </p>
                 <div class="hero-btns">
                     <a href="#products" class="btn">Shop Now <i class="fas fa-arrow-right"></i></a>
                     <a href="#deals" class="btn btn-outline">View Deals <i class="fas fa-tag"></i></a>
@@ -658,27 +705,28 @@
     </section>
 
     <!-- Categories -->
- <!-- Update the category grid section -->
-<section class="categories">
-    <div class="container">
-        <h2 class="section-title">Shop By Category</h2>
-        <div class="category-grid">
-            <div class="category-card">
-                <div class="category-img">
-                    <i class="fas fa-male"></i>
+    <!-- Update the category grid section -->
+    <section class="categories">
+        <div class="container">
+            <h2 class="section-title">Shop By Category</h2>
+            <div class="category-grid">
+                <div class="category-card">
+                    <div class="category-img">
+                        <i class="fas fa-male"></i>
+                    </div>
+                    <div class="category-info">
+                        <h3>Men</h3>
+                        <p>850+ Products</p>
+                    </div>
                 </div>
-                <div class="category-info">
-                    <h3>Men</h3>
-                    <p>850+ Products</p>
-                </div>
-            </div>
-            <div class="category-card">
-                <div class="category-img">
-                    <i class="fas fa-female"></i>
-                </div>
-                <div class="category-info">
-                    <h3>Women</h3>
-                    <p>1200+ Products</p>
+                <div class="category-card">
+                    <div class="category-img">
+                        <i class="fas fa-female"></i>
+                    </div>
+                    <div class="category-info">
+                        <h3>Women</h3>
+                        <p>1200+ Products</p>
+                    </div>
                 </div>
             </div>
             <div class="category-card">
@@ -690,18 +738,7 @@
                     <p>600+ Products</p>
                 </div>
             </div>
-            <div class="category-card">
-                <div class="category-img">
-                    <i class="fas fa-tshirt"></i>
-                </div>
-                <div class="category-info">
-                    <h3>Accessories</h3>
-                    <p>450+ Products</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+    </section>
 
     <!-- Products -->
     <section class="products">
@@ -709,11 +746,10 @@
             <h2 class="section-title">Featured Products</h2>
             <div class="product-filters">
                 <button class="filter-btn active" data-filter="all">All</button>
-                <button class="filter-btn" data-filter="electronics">Electronics</button>
+                <button class="filter-btn" data-filter="Men's Fashion">Men's Fashion</button>
                 <button class="filter-btn" data-filter="fashion">Fashion</button>
-                <button class="filter-btn" data-filter="home">Home</button>
-                <button class="filter-btn" data-filter="beauty">Beauty</button>
-                <button class="filter-btn" data-filter="books">Books</button>
+                <button class="filter-btn" data-filter="Women's Fashion">Women's Fashion</button>
+
             </div>
             <div class="product-grid" id="productGrid">
                 <!-- Products will be added here dynamically -->
@@ -917,203 +953,221 @@
         </div>
     </section>
     <!-- Map Section -->
-<section class="map-section">
-    <div class="container">
-        <h2 class="section-title">Our Location</h2>
-        <div class="map-container">
-            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3557.056087377535!2d81.0026375!3d26.862854!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x399be3b08d9def8b%3A0x5513509ccb52d137!2sFrankfinn%20Institute%20of%20Air%20Hostess%20Training%20Gomti%20Nagar!5e0!3m2!1sen!2sin!4v1718281234567!5m2!1sen!2sin" 
-                    width="100%" 
-                    height="450" 
-                    style="border:0;" 
-                    allowfullscreen="" 
-                    loading="lazy" 
-                    referrerpolicy="no-referrer-when-downgrade">
-            </iframe>
-        </div>
-    </div>
-</section>
-<!-- Service Pages (hidden by default) -->
-<div id="service-pages">
-    <!-- Contact Us Page -->
-    <div id="contact-page" class="service-page">
-        <!-- Content from file.html -->
-    </div>
-
-    <!-- FAQ Page -->
-    <div id="faq-page" class="service-page">
-        <!-- Content from file.html -->
-    </div>
-
-    <!-- Shipping Policy Page -->
-    <div id="shipping-page" class="service-page">
-        <!-- Content from file.html -->
-    </div>
-
-    <!-- Returns & Exchanges Page -->
-    <div id="returns-page" class="service-page">
-        <!-- Content from file.html -->
-    </div>
-
-    <!-- Privacy Policy Page -->
-    <div id="privacy-page" class="service-page">
-        <!-- Content from file.html -->
-    </div>
-
-    <!-- Terms & Conditions Page -->
-    <div id="terms-page" class="service-page">
-        <!-- Content from file.html -->
-    </div>
-</div>
-    
-<!-- About Us Section -->
-<section class="company-info" id="about">
-    <div class="container">
-        <h2 class="section-title">About Us</h2>
-        <div class="info-grid">
-            <div class="info-card">
-                <h3>Our Legal Identity</h3>
-                <p><strong>Company Name:</strong> Mighty Mahal E-Commerce Pvt. Ltd.</p>
-                <p><strong>Registered Address:</strong> Mumbai, Maharashtra, India</p>
-                <p><strong>GSTIN:</strong> <span class="gst-badge">27ABCDE1234F1Z5</span></p>
-            </div>
-            <div class="info-card">
-                <h3>Our Products</h3>
-                <p>We specialize in premium fashion and lifestyle products including apparel, footwear, accessories, and home essentials. Our curated collection ensures quality, authenticity, and style.</p>
-            </div>
-            <div class="info-card">
-                <h3>Our Mission & Goals</h3>
-                <ul class="info-list">
-                    <li><i class="fas fa-check-circle"></i> Deliver top-quality products at fair prices.</li>
-                    <li><i class="fas fa-check-circle"></i> Provide a seamless and secure shopping experience.</li>
-                    <li><i class="fas fa-check-circle"></i> Support Indian artisans and sustainable fashion.</li>
-                    <li><i class="fas fa-check-circle"></i> Become India’s most trusted premium e-commerce brand.</li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</section>
-
-
-<!-- Footer -->
-    <footer>
+    <section class="map-section">
         <div class="container">
-            <div class="footer-grid">
-                <div class="footer-col">
-                    <h4>Mighty Mahal</h4>
-                    <p>Premium e-commerce platform offering a wide range of products with exceptional customer service
-                        and fast delivery.</p>
-                    <div class="social-links">
-                        <a href="#"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                        <a href="#"><i class="fab fa-youtube"></i></a>
+            <h2 class="section-title">Our Location</h2>
+            <div class="map-container">
+                <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3557.056087377535!2d81.0026375!3d26.862854!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x399be3b08d9def8b%3A0x5513509ccb52d137!2sFrankfinn%20Institute%20of%20Air%20Hostess%20Training%20Gomti%20Nagar!5e0!3m2!1sen!2sin!4v1718281234567!5m2!1sen!2sin"
+                    width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+            </div>
+        </div>
+    </section>
+    <!-- Service Pages (hidden by default) -->
+    <div id="service-pages">
+        <!-- Contact Us Page -->
+        <div id="contact-page" class="service-page">
+            <!-- Content from file.html -->
+        </div>
+
+        <!-- FAQ Page -->
+        <div id="faq-page" class="service-page">
+            <!-- Content from file.html -->
+        </div>
+
+        <!-- Shipping Policy Page -->
+        <div id="shipping-page" class="service-page">
+            <!-- Content from file.html -->
+        </div>
+
+        <!-- Returns & Exchanges Page -->
+        <div id="returns-page" class="service-page">
+            <!-- Content from file.html -->
+        </div>
+
+        <!-- Privacy Policy Page -->
+        <div id="privacy-page" class="service-page">
+            <!-- Content from file.html -->
+        </div>
+
+        <!-- Terms & Conditions Page -->
+        <div id="terms-page" class="service-page">
+            <!-- Content from file.html -->
+        </div>
+
+        <!-- Cancellation Policy Page -->
+        <div id="cancellation-policy" class="service-page">
+            <!-- content from file.html-->
+        </div>
+
+        <!-- About Us Section -->
+        <section class="company-info" id="about">
+            <div class="container">
+                <h2 class="section-title">About Us</h2>
+                <div class="info-grid">
+                    <div class="info-card">
+                        <h3>Our Legal Identity</h3>
+                        <p><strong>Company Name:</strong> MIGHTY MAHAL ECOMM PRIVATE LIMITED.</p>
+                        <p><strong>Registered Address:</strong> Mumbai, Maharashtra, India</p>
+                        <p><strong>GSTIN:</strong> <span class="gst-badge">27ABCDE1234F1Z5</span>
+                            1.To carry on the business of buying, selling, reselling, importing, exporting,
+                            transporting, storing, developing, promoting, marketing or supplying, trading, dealing in
+                            any manner whatsoever in all type of goods on retail as well as on wholesale basis in India
+                            or elsewhere. & to arrange collaboration between any foreign party or concern and the
+                            company or any other Indian parties or to act as trustees for foreign or Indian investors an
+                            collaborators and to carry out the terms of the agreement, concessions and Privileges and
+                            toobtain technical know-how from others collaborating with the company.</p>
+                    </div>
+                    <div class="info-card">
+                        <h3>Our Products</h3>
+                        <p>We specialize in premium fashion and lifestyle products including apparel Men and Women wears
+                            . Our curated collection ensures quality, authenticity, and style.</p>
+                    </div>
+                    <div class="info-card">
+                        <h3>Our Mission & Goals</h3>
+                        <ul class="info-list">
+                            <li><i class="fas fa-check-circle"></i> Deliver top-quality products at fair prices.</li>
+                            <li><i class="fas fa-check-circle"></i> Provide a seamless and secure shopping experience.
+                            </li>
+                            <li><i class="fas fa-check-circle"></i> Support Indian artisans and sustainable fashion.
+                            </li>
+                            <li><i class="fas fa-check-circle"></i> Become India’s most trusted premium e-commerce
+                                brand.
+                            </li>
+                        </ul>
                     </div>
                 </div>
-                <div class="footer-col">
-                    <h4>Quick Links</h4>
-                    <ul class="footer-links">
-                        <li><a href="#">Home</a></li>
-                        <li><a href="#">Products</a></li>
-                        <li><a href="#">Categories</a></li>
-                        <li><a href="#">Deals & Offers</a></li>
-                        <li><a href="#">New Arrivals</a></li>
-                        <li><a href="#">Best Sellers</a></li>
-                    </ul>
-                </div>
-                <div class="footer-col">
-                    <h4>Customer Service</h4>
-                    <ul class="footer-links">
-                        <li><a href="file.html#contact-page">Contact Us</a></li>
-                        <li><a href="file.html#faq-page">FAQs</a></li>
-                        <li><a href="file.html#shipping-page">Shipping Policy</a></li>
-                        <li><a href="file.html#returns-page">Returns & Exchanges</a></li>
-                        <li><a href="file.html#privacy-page">Privacy Policy</a></li>
-                        <li><a href="file.html#terms-page">Terms & Conditions</a></li>
-<li><a href='#cancellation-policy' class='service-link'>Cancellation Policy</a></li>
-                    </ul>
-                </div>
-                <div class="footer-col">
-                    <h4>Contact Info</h4>
-                    <ul class="footer-links">
-                        <li><i class="fas fa-map-marker-alt"></i> UPER GROUND, Building No. 4/37, Finns College Road,
-                            Gomti Nagar, Lucknow, UP - 226010</li>
-                        <li><i class="fas fa-phone-alt"></i> +91 9876543210</li>
-                        <li><i class="fas fa-envelope"></i> info@mightymahal.com</li>
-                        <li><i class="fas fa-headset"></i> Support: support@mightymahal.com</li>
-                    </ul>
-                </div>
             </div>
-            <div class="copyright">
-                <p>&copy; 2025 Mighty Mahal Ecomm Private Limited. All Rights Reserved. GSTIN: 09AASCM7949M1Z9</p>
-            </div>
-        </div>
-    </footer>
+        </section>
 
-    <!-- Welcome Popup -->
-    <div class="welcome-popup" id="welcomePopup">
-        <div class="welcome-popup-content">
-            <button class="close-welcome-popup" id="closeWelcomePopup">
-                <i class="fas fa-times"></i>
-            </button>
-            <div class="welcome-popup-header">
-                <div class="welcome-icon">
-                    <i class="fas fa-crown"></i>
+
+        <!-- Footer -->
+        <footer>
+            <div class="container">
+                <div class="footer-grid">
+                    <div class="footer-col">
+                        <h4>Mighty Mahal</h4>
+                        <p>Premium e-commerce platform offering a wide range of products with exceptional customer
+                            service
+                            and fast delivery.</p>
+                        <div class="social-links">
+                            <a href="#"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="#"><i class="fab fa-instagram"></i></a>
+                            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="#"><i class="fab fa-youtube"></i></a>
+                        </div>
+                    </div>
+                    <div class="footer-col">
+                        <h4>Quick Links</h4>
+                        <ul class="footer-links">
+                            <li><a href="#">Home</a></li>
+                            <li><a href="#">Products</a></li>
+                            <li><a href="#">Categories</a></li>
+                            <li><a href="#">Deals & Offers</a></li>
+                            <li><a href="#">New Arrivals</a></li>
+                            <li><a href="#">Best Sellers</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-col">
+                        <h4>Customer Service</h4>
+                        <ul class="footer-links">
+                            <li><a href="file.html#contact-page">Contact Us</a></li>
+                            <li><a href="file.html#faq-page">FAQs</a></li>
+                            <li><a href="file.html#shipping-page">Shipping Policy</a></li>
+                            <li><a href="file.html#returns-page">Returns & Exchanges</a></li>
+                            <li><a href="file.html#privacy-page">Privacy Policy</a></li>
+                            <li><a href="file.html#terms-page">Terms & Conditions</a></li>
+                            <li><a href="file.html#cancellation-policy">Cancellation Policy</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-col">
+                        <h4>Contact Info</h4>
+                        <ul class="footer-links">
+                            <li><i class="fas fa-map-marker-alt"></i> UPER GROUND, Building No. 4/37, Finns College
+                                Road,
+                                Gomti Nagar, Lucknow, UP - 226010</li>
+                            <li><i class="fas fa-phone-alt"></i> +91 9876543210</li>
+                            <li><i class="fas fa-envelope"></i> info@mightymahal.com</li>
+                            <li><i class="fas fa-headset"></i> Support: support@mightymahal.com</li>
+                        </ul>
+                    </div>
                 </div>
-                <h2>Welcome to Mighty Mahal!</h2>
+                <div class="copyright">
+                    <p>&copy; 2025 Mighty Mahal Ecomm Private Limited. All Rights Reserved. GSTIN: 09AASCM7949M1Z9</p>
+                </div>
             </div>
-            <div class="welcome-popup-body">
-                <p>🎉 <strong>Special Offer!</strong> Get 20% off on your first order</p>
-                <p>✨ Discover amazing products at unbeatable prices</p>
-                <p>🚚 Free shipping on orders over ₹500</p>
-                <p>💬 Need help? Our chatbot is here to assist you!</p>
-            </div>
-            <div class="welcome-popup-actions">
-                <button class="welcome-btn primary" onclick="document.getElementById('closeWelcomePopup').click(); document.getElementById('chatbotToggle').click();">
-                    Chat with us
+        </footer>
+
+        <!-- Welcome Popup -->
+        <div class="welcome-popup" id="welcomePopup">
+            <div class="welcome-popup-content">
+                <button class="close-welcome-popup" id="closeWelcomePopup">
+                    <i class="fas fa-times"></i>
                 </button>
-                <button class="welcome-btn secondary" onclick="document.getElementById('closeWelcomePopup').click();">
-                    Start Shopping
+                <div class="welcome-popup-header">
+                    <div class="welcome-icon">
+                        <i class="fas fa-crown"></i>
+                    </div>
+                    <h2>Welcome to Mighty Mahal!</h2>
+                </div>
+                <div class="welcome-popup-body">
+                    <p>🎉 <strong>Special Offer!</strong> Get 20% off on your first order</p>
+                    <p>✨ Discover amazing products at unbeatable prices</p>
+                    <p>🚚 Free shipping on orders over ₹500</p>
+                    <p>💬 Need help? Our chatbot is here to assist you!</p>
+                </div>
+                <div class="welcome-popup-actions">
+                    <button class="welcome-btn primary"
+                        onclick="document.getElementById('closeWelcomePopup').click(); document.getElementById('chatbotToggle').click();">
+                        Chat with us
+                    </button>
+                    <button class="welcome-btn secondary"
+                        onclick="document.getElementById('closeWelcomePopup').click();">
+                        Start Shopping
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chatbot -->
+        <div class="chatbot-toggle" id="chatbotToggle">
+            <i class="fas fa-comments"></i>
+            <span class="chatbot-badge">💬</span>
+        </div>
+
+        <div class="chatbot-container" id="chatbotContainer">
+            <div class="chatbot-header">
+                <div class="chatbot-header-info">
+                    <div class="chatbot-avatar">
+                        <i class="fas fa-crown"></i>
+                    </div>
+                    <div class="chatbot-title">
+                        <h3>Mighty Mahal Assistant</h3>
+                        <span class="chatbot-status">Online</span>
+                    </div>
+                </div>
+                <button class="close-chatbot" id="closeChatbot">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div class="chatbot-messages" id="chatMessages">
+                <!-- Messages will be added here dynamically -->
+            </div>
+
+            <div class="chatbot-input">
+                <input type="text" id="chatInput" placeholder="Type your message...">
+                <button id="sendMessage">
+                    <i class="fas fa-paper-plane"></i>
                 </button>
             </div>
         </div>
-    </div>
 
-    <!-- Chatbot -->
-    <div class="chatbot-toggle" id="chatbotToggle">
-        <i class="fas fa-comments"></i>
-        <span class="chatbot-badge">💬</span>
-    </div>
+        <script src="script.js"></script>
 
-    <div class="chatbot-container" id="chatbotContainer">
-        <div class="chatbot-header">
-            <div class="chatbot-header-info">
-                <div class="chatbot-avatar">
-                    <i class="fas fa-crown"></i>
-                </div>
-                <div class="chatbot-title">
-                    <h3>Mighty Mahal Assistant</h3>
-                    <span class="chatbot-status">Online</span>
-                </div>
-            </div>
-            <button class="close-chatbot" id="closeChatbot">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-        
-        <div class="chatbot-messages" id="chatMessages">
-            <!-- Messages will be added here dynamically -->
-        </div>
-        
-        <div class="chatbot-input">
-            <input type="text" id="chatInput" placeholder="Type your message...">
-            <button id="sendMessage">
-                <i class="fas fa-paper-plane"></i>
-            </button>
-        </div>
-    </div>
-
-    <script src="script.js"></script>
 </body>
 
 </html>
